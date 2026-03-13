@@ -4,6 +4,10 @@ ArchMind is a Python REPL-style CLI for understanding and analyzing software arc
 
 The repository is documentation-driven at this stage. These markdown files define the implementation contract for future code.
 
+## Demo
+
+Watch the ArchMind demo video: [https://youtu.be/yHiM8-ig27o](https://youtu.be/yHiM8-ig27o)
+
 ## v0 product shape
 - Interface: CLI-only REPL
 - Language: Python 3.11+
