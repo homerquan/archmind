@@ -26,11 +26,11 @@ def test_pipeline_generates_report_and_artifacts(tmp_path: Path) -> None:
     remote_repo.mkdir()
     _init_repo(remote_repo)
 
-    output_path = tmp_path / "result.md"
+    output_dir = tmp_path / "result"
     request = ArchitectureRequest(
         github_url=str(remote_repo),
         branch="main",
-        output_markdown_path=str(output_path),
+        output_dir=str(output_dir),
         llm_provider="openai",
     )
     prompt_io = PromptIO(input_fn=lambda _: "", getpass_fn=lambda _: "")
@@ -39,8 +39,14 @@ def test_pipeline_generates_report_and_artifacts(tmp_path: Path) -> None:
     result = run(request, ui, workspaces_root=tmp_path / "workspaces")
 
     workspace = Path(result["workspace"])
-    assert output_path.exists()
+    assert (output_dir / "result.md").exists()
+    assert (output_dir / "graph_visualization.pdf").exists()
+    assert (output_dir / "metrics.json").exists()
+    assert (output_dir / "findings.json").exists()
+    assert (output_dir / "dsm.csv").exists()
     assert (workspace / "graph" / "architecture_graph.json").exists()
     assert (workspace / "analysis" / "metrics.json").exists()
+    assert (workspace / "analysis" / "graph_visualization.pdf").exists()
+    assert (workspace / "analysis" / "graph_visualization.pdf").read_bytes().startswith(b"%PDF-1.4")
     assert (workspace / "deliverables" / "result.md").exists()
     assert (workspace / "eval" / "report.json").exists()

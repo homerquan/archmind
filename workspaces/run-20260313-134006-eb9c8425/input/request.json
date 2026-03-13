@@ -1,6 +1,0 @@
-{
-  "branch": "main",
-  "github_url": "https://github.com/homerquan/ApronAI",
-  "llm_provider": "gemini",
-  "output_markdown_path": "result.md"
-}

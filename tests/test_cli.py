@@ -25,5 +25,5 @@ def test_collect_request_prompts_for_missing_inputs(monkeypatch) -> None:
     assert exit_code == 0
     assert captured["request"].github_url == "https://github.com/example/project"
     assert captured["request"].branch == "main"
-    assert captured["request"].output_markdown_path == "result.md"
+    assert captured["request"].output_dir == "result"
     assert captured["request"].llm_provider == "anthropic"

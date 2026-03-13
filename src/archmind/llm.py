@@ -72,7 +72,7 @@ def _litellm_interpret(
         f"Repository: {snapshot.github_url}\n"
         f"Branch: {snapshot.branch}\n"
         f"Commit: {snapshot.commit_sha}\n"
-        f"Requested output file: {request.output_markdown_path}\n"
+        f"Requested output folder: {request.output_dir}\n"
         f"Metrics: {metrics}\n"
         f"Findings: {findings}\n"
         "Write a concise markdown explanation with sections for Overview, Key Findings, and Recommendations."

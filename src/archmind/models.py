@@ -8,7 +8,7 @@ from typing import Any
 class ArchitectureRequest:
     github_url: str
     branch: str = "main"
-    output_markdown_path: str = "result.md"
+    output_dir: str = "result"
     llm_provider: str = "openai"
 
     def to_dict(self) -> dict[str, Any]:

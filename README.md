@@ -10,7 +10,7 @@ The repository is documentation-driven at this stage. These markdown files defin
 - Input: GitHub repository URL
 - Branch selection: optional, default `main`
 - Core output: architecture graph plus analysis findings
-- Report output: print to terminal and write Markdown to `result.md` by default
+- Report output: print to terminal and export a result folder named `result` by default
 - LLM access: user selects provider and supplies their own API key
 - Terminal UX: ASCII-art opening intro with version, modern prompts, progress bars, and tasteful emoji or ASCII icons
 
@@ -32,10 +32,10 @@ The first useful analysis set should stay concrete and explainable:
 
 ## Intended CLI shape
 ```bash
-archmind [<github_url>] [--branch main] [--output result.md] [--llm-provider openai]
+archmind [<github_url>] [--branch main] [--output result] [--llm-provider openai]
 ```
 
-If a repository URL, branch, output path, LLM provider, or API key is not provided at startup, the REPL should ask for it interactively.
+If a repository URL, branch, output folder, LLM provider, or API key is not provided at startup, the REPL should ask for it interactively.
 
 ## How to run
 Use Python 3.11+.
@@ -85,7 +85,7 @@ archmind
 Launch with startup parameters:
 
 ```bash
-archmind https://github.com/example/project --branch main --output result.md --llm-provider openai
+archmind https://github.com/example/project --branch main --output result --llm-provider openai
 ```
 
 Run it without installing the console script:
@@ -106,6 +106,22 @@ Then run:
 ```bash
 python3 -m pytest
 ```
+
+## Result output structure
+The user-facing export target is a folder, not a single file.
+
+Default exported folder:
+
+```text
+result/
+  result.md
+  graph_visualization.pdf
+  metrics.json
+  findings.json
+  dsm.csv
+```
+
+Workspace artifacts remain under `workspaces/<run_id>/` and include the full analysis pipeline outputs, evaluation files, provenance, and the same graph PDF under `analysis/graph_visualization.pdf`.
 
 ## Reading order
 1. `AGENTS.md` for repo-local coding instructions

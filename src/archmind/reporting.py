@@ -24,7 +24,7 @@ def render_report(
         f"- Repository: `{snapshot.github_url}`",
         f"- Branch: `{snapshot.branch}`",
         f"- Commit: `{snapshot.commit_sha}`",
-        f"- Output path: `{request.output_markdown_path}`",
+        f"- Output folder: `{request.output_dir}`",
         f"- LLM provider: `{llm_config.provider}`",
         f"- LLM model: `{llm_config.model}`",
         f"- API key source: `{llm_config.api_key_source}`",
@@ -54,9 +54,11 @@ def terminal_summary(snapshot: RepositorySnapshot, metrics: dict, findings: list
     )
 
 
-def write_reports(workspace: Path, output_path: Path, markdown: str) -> Path:
+def write_reports(workspace: Path, output_dir: Path, markdown: str) -> tuple[Path, Path]:
     deliverable_path = workspace / "deliverables" / "result.md"
     ensure_dir(deliverable_path.parent)
     write_text(deliverable_path, markdown)
-    write_text(output_path, markdown)
-    return deliverable_path
+    ensure_dir(output_dir)
+    exported_report_path = output_dir / "result.md"
+    write_text(exported_report_path, markdown)
+    return deliverable_path, exported_report_path
