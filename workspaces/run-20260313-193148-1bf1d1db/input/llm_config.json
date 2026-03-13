@@ -1,5 +1,0 @@
-{
-  "api_key_source": "prompt",
-  "model": "gemini/gemini-1.5-flash",
-  "provider": "gemini"
-}
