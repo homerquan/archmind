@@ -1,0 +1,96 @@
+{
+  "modules": {
+    "server.gemini_live": {
+      "external_imports": [
+        "asyncio",
+        "google",
+        "inspect",
+        "logging"
+      ],
+      "internal_imports": [],
+      "path": "server/gemini_live.py"
+    },
+    "server.main": {
+      "external_imports": [
+        "argparse",
+        "asyncio",
+        "base64",
+        "contextlib",
+        "dotenv",
+        "fastapi",
+        "gemini_live",
+        "json",
+        "logging",
+        "os",
+        "pathlib",
+        "progress_tracker",
+        "uvicorn"
+      ],
+      "internal_imports": [],
+      "path": "server/main.py"
+    },
+    "server.progress_tracker": {
+      "external_imports": [
+        "collections",
+        "copy",
+        "re",
+        "threading",
+        "time"
+      ],
+      "internal_imports": [],
+      "path": "server/progress_tracker.py"
+    },
+    "server.tests.test_gemini_live": {
+      "external_imports": [
+        "asyncio",
+        "gemini_live",
+        "pathlib",
+        "sys"
+      ],
+      "internal_imports": [],
+      "path": "server/tests/test_gemini_live.py"
+    },
+    "server.tests.test_main_logging": {
+      "external_imports": [
+        "importlib",
+        "logging",
+        "pathlib",
+        "sys"
+      ],
+      "internal_imports": [],
+      "path": "server/tests/test_main_logging.py"
+    },
+    "server.tests.test_main_memory": {
+      "external_imports": [
+        "importlib",
+        "pathlib",
+        "sys"
+      ],
+      "internal_imports": [],
+      "path": "server/tests/test_main_memory.py"
+    },
+    "server.tests.test_main_routes": {
+      "external_imports": [
+        "fastapi",
+        "importlib",
+        "pathlib",
+        "sys"
+      ],
+      "internal_imports": [],
+      "path": "server/tests/test_main_routes.py"
+    },
+    "server.tests.test_main_websocket": {
+      "external_imports": [
+        "asyncio",
+        "fastapi",
+        "importlib",
+        "json",
+        "logging",
+        "pathlib",
+        "sys"
+      ],
+      "internal_imports": [],
+      "path": "server/tests/test_main_websocket.py"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "edge_types": [
+    "contains",
+    "imports",
+    "depends_on"
+  ],
+  "node_features": [
+    "path_depth",
+    "internal_import_count",
+    "external_import_count",
+    "in_degree",
+    "out_degree"
+  ],
+  "schema_version": 1
+}

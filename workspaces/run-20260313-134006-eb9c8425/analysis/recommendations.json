@@ -1,0 +1,23 @@
+[
+  {
+    "kind": "reduce_coupling",
+    "summary": "Reduce dependency pressure around module:server.tests.test_main_websocket by moving shared concerns behind narrower interfaces.",
+    "targets": [
+      "module:server.tests.test_main_websocket"
+    ]
+  },
+  {
+    "kind": "reduce_coupling",
+    "summary": "Reduce dependency pressure around module:server.tests.test_main_routes by moving shared concerns behind narrower interfaces.",
+    "targets": [
+      "module:server.tests.test_main_routes"
+    ]
+  },
+  {
+    "kind": "reduce_coupling",
+    "summary": "Reduce dependency pressure around module:server.tests.test_main_memory by moving shared concerns behind narrower interfaces.",
+    "targets": [
+      "module:server.tests.test_main_memory"
+    ]
+  }
+]

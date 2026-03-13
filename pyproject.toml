@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "archmind"
+version = "0.1.0"
+description = "REPL-style architecture analysis CLI for Git repositories."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "rich>=13.7.0",
+  "litellm>=1.51.0",
+]
+
+[project.optional-dependencies]
+graph = ["torch>=2.4.0", "torch-geometric>=2.6.0"]
+
+[project.scripts]
+archmind = "archmind.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
