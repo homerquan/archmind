@@ -25,12 +25,14 @@ def _render_graph_pdf_content(graph: ArchitectureGraph) -> str:
     positions = _layout_positions(nodes)
     if repository_nodes:
         positions[repository_nodes[0].id] = (PAGE_WIDTH / 2 - 45, PAGE_HEIGHT - 70)
+    title = _escape_pdf_text(str(graph.metadata.get("title", "ArchMind Graph Visualization")))
+    subtitle = _escape_pdf_text(str(graph.metadata.get("graph_id", "graph")))
 
     lines = [
         "q",
         "0.98 0.99 1 rg 0 0 842 595 re f",
-        "BT /F1 18 Tf 36 560 Td (ArchMind Graph Visualization) Tj ET",
-        "BT /F1 10 Tf 36 542 Td (Module and dependency structure for the analyzed repository) Tj ET",
+        f"BT /F1 18 Tf 36 560 Td ({title}) Tj ET",
+        f"BT /F1 10 Tf 36 542 Td ({subtitle}) Tj ET",
     ]
 
     for edge in graph.edges:

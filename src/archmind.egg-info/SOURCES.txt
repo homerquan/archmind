@@ -6,6 +6,8 @@ src/archmind/analysis.py
 src/archmind/cli.py
 src/archmind/evaluation.py
 src/archmind/graphing.py
+src/archmind/inspection.py
+src/archmind/knowledge.py
 src/archmind/llm.py
 src/archmind/models.py
 src/archmind/pipeline.py
@@ -13,6 +15,7 @@ src/archmind/reporting.py
 src/archmind/repository.py
 src/archmind/ui.py
 src/archmind/utils.py
+src/archmind/visualization.py
 src/archmind.egg-info/PKG-INFO
 src/archmind.egg-info/SOURCES.txt
 src/archmind.egg-info/dependency_links.txt

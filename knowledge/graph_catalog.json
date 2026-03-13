@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "graphs": [
+    {
+      "id": "dependency_graph",
+      "title": "Dependency Graph",
+      "summary": "Module and external dependency relationships used for coupling, cycles, and structural pressure.",
+      "supports_issues": [
+        "tight_coupling",
+        "unclear_boundaries",
+        "low_cohesion",
+        "scalability_bottlenecks",
+        "weak_fault_isolation"
+      ]
+    },
+    {
+      "id": "architecture_graph",
+      "title": "Architecture Graph",
+      "summary": "Repository, package, and module boundary structure used for cohesion and boundary inspection.",
+      "supports_issues": [
+        "tight_coupling",
+        "unclear_boundaries",
+        "low_cohesion",
+        "poor_separation_of_concerns"
+      ]
+    },
+    {
+      "id": "data_flow_graph",
+      "title": "Data Flow Graph",
+      "summary": "Inferred reads, writes, emits, and external data interactions used for ownership, bottleneck, and security inspection.",
+      "supports_issues": [
+        "poor_separation_of_concerns",
+        "data_ownership_confusion",
+        "scalability_bottlenecks",
+        "weak_fault_isolation",
+        "security_not_built_in"
+      ]
+    },
+    {
+      "id": "interface_graph",
+      "title": "Interface Graph",
+      "summary": "Public interfaces, entrypoints, and their consumers used for API and integration analysis.",
+      "supports_issues": [
+        "bad_interface_api_design",
+        "unclear_boundaries",
+        "tight_coupling",
+        "weak_fault_isolation"
+      ]
+    },
+    {
+      "id": "operational_risk_graph",
+      "title": "Operational Risk Graph",
+      "summary": "Inferred observability and security capability coverage used for diagnosability and trust-boundary inspection.",
+      "supports_issues": [
+        "lack_of_observability",
+        "security_not_built_in",
+        "weak_fault_isolation"
+      ]
+    }
+  ]
+}

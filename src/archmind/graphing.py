@@ -3,11 +3,70 @@ from __future__ import annotations
 import ast
 import json
 from collections import defaultdict
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 from archmind.models import ArchitectureGraph, GraphEdge, GraphNode, RepositorySnapshot
 from archmind.utils import compact_path, write_text
+
+
+DATA_STORE_IMPORTS = {
+    "sqlite3": "database",
+    "sqlalchemy": "database",
+    "psycopg": "database",
+    "psycopg2": "database",
+    "pymongo": "database",
+    "redis": "cache",
+    "shelve": "database",
+}
+
+EXTERNAL_SERVICE_IMPORTS = {
+    "requests": "external_service",
+    "httpx": "external_service",
+    "aiohttp": "external_service",
+    "grpc": "external_service",
+    "boto3": "external_service",
+}
+
+QUEUE_IMPORTS = {
+    "kafka": "queue",
+    "pika": "queue",
+    "celery": "queue",
+}
+
+OBSERVABILITY_IMPORTS = {"logging", "loguru", "structlog", "prometheus_client", "opentelemetry", "sentry_sdk"}
+SECURITY_IMPORTS = {"jwt", "authlib", "bcrypt", "cryptography", "secrets", "ssl", "hashlib"}
+
+READ_HINTS = {"get", "load", "read", "fetch", "query", "select", "find", "pull"}
+WRITE_HINTS = {"set", "save", "write", "update", "insert", "delete", "post", "put", "commit", "store"}
+EMIT_HINTS = {"emit", "publish", "send", "enqueue", "dispatch", "produce"}
+ENTRYPOINT_HINTS = {"main", "cli", "handler", "endpoint", "serve", "run"}
+ROUTE_HINTS = {"route", "get", "post", "put", "delete", "patch"}
+AUTH_HINTS = {"auth", "oauth", "jwt", "token", "login", "permission"}
+SECRET_HINTS = {"secret", "key", "token", "credential"}
+PROTECTION_HINTS = {"encrypt", "decrypt", "hash", "sign", "verify"}
+
+
+@dataclass(slots=True)
+class ModuleContext:
+    module_name: str
+    path: Path
+    package_name: str
+    internal_imports: set[str]
+    external_imports: set[str]
+    call_names: set[str]
+    public_symbols: list[str]
+    decorators: set[str]
+    entrypoint: bool
+    data_targets: dict[str, str]
+    has_read_behavior: bool
+    has_write_behavior: bool
+    has_emit_behavior: bool
+    has_observability: bool
+    has_auth: bool
+    has_secret_handling: bool
+    has_data_protection: bool
 
 
 def _module_name_from_path(path: Path) -> str:
@@ -43,13 +102,45 @@ def _resolve_import(current_module: str, level: int, module: str | None) -> str 
     return ".".join(part for part in parts if part)
 
 
-def parse_dependencies(repo_root: Path, modules: dict[str, Path]) -> dict[str, dict[str, set[str]]]:
-    dependency_map: dict[str, dict[str, set[str]]] = {}
+def _longest_internal_match(import_name: str, module_names: set[str]) -> str | None:
+    parts = import_name.split(".")
+    for index in range(len(parts), 0, -1):
+        candidate = ".".join(parts[:index])
+        if candidate in module_names:
+            return candidate
+    return None
+
+
+def _call_name(node: ast.AST) -> str | None:
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        parent = _call_name(node.value)
+        return f"{parent}.{node.attr}" if parent else node.attr
+    return None
+
+
+def _decorator_name(node: ast.AST) -> str | None:
+    return _call_name(node)
+
+
+def _package_name(module_name: str) -> str:
+    return module_name.split(".", 1)[0] if "." in module_name else module_name
+
+
+def scan_python_repository(repo_root: Path) -> dict[str, ModuleContext]:
+    modules = discover_python_modules(repo_root)
     module_names = set(modules)
+    contexts: dict[str, ModuleContext] = {}
+
     for module_name, path in modules.items():
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
         internal: set[str] = set()
         external: set[str] = set()
-        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        call_names: set[str] = set()
+        public_symbols: list[str] = []
+        decorators: set[str] = set()
+
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 for alias in node.names:
@@ -76,23 +167,109 @@ def parse_dependencies(repo_root: Path, modules: dict[str, Path]) -> dict[str, d
                         internal.add(internal_target)
                     elif base:
                         external.add(base.split(".")[0])
-        dependency_map[module_name] = {"internal": internal, "external": external}
-    return dependency_map
+            elif isinstance(node, ast.Call):
+                name = _call_name(node.func)
+                if name:
+                    call_names.add(name)
+            elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                if not node.name.startswith("_"):
+                    public_symbols.append(node.name)
+                for decorator in node.decorator_list:
+                    name = _decorator_name(decorator)
+                    if name:
+                        decorators.add(name)
+
+        lower_calls = {name.lower() for name in call_names}
+        lower_decorators = {name.lower() for name in decorators}
+        lower_externals = {name.lower() for name in external}
+
+        data_targets: dict[str, str] = {}
+        for name in external:
+            lower = name.lower()
+            if lower in DATA_STORE_IMPORTS:
+                data_targets[name] = DATA_STORE_IMPORTS[lower]
+            elif lower in QUEUE_IMPORTS:
+                data_targets[name] = QUEUE_IMPORTS[lower]
+            elif lower in EXTERNAL_SERVICE_IMPORTS:
+                data_targets[name] = EXTERNAL_SERVICE_IMPORTS[lower]
+
+        entrypoint = (
+            path.name in {"main.py", "app.py", "cli.py", "routes.py", "views.py", "api.py"}
+            or any(hint in symbol.lower() for symbol in public_symbols for hint in ENTRYPOINT_HINTS)
+            or any(hint in decorator for decorator in lower_decorators for hint in ROUTE_HINTS)
+        )
+        has_read_behavior = any(any(hint in name for hint in READ_HINTS) for name in lower_calls)
+        has_write_behavior = any(any(hint in name for hint in WRITE_HINTS) for name in lower_calls)
+        has_emit_behavior = any(any(hint in name for hint in EMIT_HINTS) for name in lower_calls)
+        has_observability = bool(lower_externals & OBSERVABILITY_IMPORTS) or any(
+            "log" in name or "metric" in name or "trace" in name for name in lower_calls
+        )
+        has_auth = bool(lower_externals & SECURITY_IMPORTS) or any(any(hint in name for hint in AUTH_HINTS) for name in lower_calls)
+        has_secret_handling = any(any(hint in name for hint in SECRET_HINTS) for name in lower_calls)
+        has_data_protection = any(any(hint in name for hint in PROTECTION_HINTS) for name in lower_calls)
+
+        contexts[module_name] = ModuleContext(
+            module_name=module_name,
+            path=path,
+            package_name=_package_name(module_name),
+            internal_imports=internal,
+            external_imports=external,
+            call_names=call_names,
+            public_symbols=sorted(public_symbols),
+            decorators=decorators,
+            entrypoint=entrypoint,
+            data_targets=data_targets,
+            has_read_behavior=has_read_behavior,
+            has_write_behavior=has_write_behavior,
+            has_emit_behavior=has_emit_behavior,
+            has_observability=has_observability,
+            has_auth=has_auth,
+            has_secret_handling=has_secret_handling,
+            has_data_protection=has_data_protection,
+        )
+
+    return contexts
 
 
-def _longest_internal_match(import_name: str, module_names: set[str]) -> str | None:
-    parts = import_name.split(".")
-    for index in range(len(parts), 0, -1):
-        candidate = ".".join(parts[:index])
-        if candidate in module_names:
-            return candidate
-    return None
+def build_graph_bundle(
+    snapshot: RepositorySnapshot,
+    repo_root: Path,
+) -> tuple[dict[str, ArchitectureGraph], dict[str, dict[str, Any]], dict[str, Any]]:
+    contexts = scan_python_repository(repo_root)
+    graphs = {
+        "dependency_graph": build_dependency_graph(snapshot, repo_root, contexts),
+        "architecture_graph": build_architecture_graph(snapshot, repo_root, contexts),
+        "data_flow_graph": build_data_flow_graph(snapshot, repo_root, contexts),
+        "interface_graph": build_interface_graph(snapshot, repo_root, contexts),
+        "operational_risk_graph": build_operational_risk_graph(snapshot, repo_root, contexts),
+    }
+    feature_schemas = {graph_id: feature_schema_for_graph(graph) for graph_id, graph in graphs.items()}
+    inventory = module_inventory(contexts, repo_root)
+    return graphs, feature_schemas, inventory
 
 
-def build_architecture_graph(snapshot: RepositorySnapshot, repo_root: Path) -> tuple[ArchitectureGraph, dict[str, Any], dict[str, Any]]:
-    modules = discover_python_modules(repo_root)
-    dependencies = parse_dependencies(repo_root, modules)
+def module_inventory(contexts: dict[str, ModuleContext], repo_root: Path) -> dict[str, Any]:
+    return {
+        "modules": {
+            module_name: {
+                "path": compact_path(context.path, repo_root),
+                "package": context.package_name,
+                "internal_imports": sorted(context.internal_imports),
+                "external_imports": sorted(context.external_imports),
+                "public_symbols": context.public_symbols,
+                "entrypoint": context.entrypoint,
+                "data_targets": context.data_targets,
+            }
+            for module_name, context in sorted(contexts.items())
+        }
+    }
 
+
+def build_dependency_graph(
+    snapshot: RepositorySnapshot,
+    repo_root: Path,
+    contexts: dict[str, ModuleContext],
+) -> ArchitectureGraph:
     nodes: list[GraphNode] = [
         GraphNode(
             id="repository:root",
@@ -104,11 +281,8 @@ def build_architecture_graph(snapshot: RepositorySnapshot, repo_root: Path) -> t
     edges: list[GraphEdge] = []
     external_nodes: dict[str, GraphNode] = {}
 
-    for module_name, path in modules.items():
-        rel = compact_path(path, repo_root)
-        depth = len(module_name.split("."))
-        internal_count = len(dependencies[module_name]["internal"])
-        external_count = len(dependencies[module_name]["external"])
+    for module_name, context in sorted(contexts.items()):
+        rel = compact_path(context.path, repo_root)
         nodes.append(
             GraphNode(
                 id=f"module:{module_name}",
@@ -116,30 +290,16 @@ def build_architecture_graph(snapshot: RepositorySnapshot, repo_root: Path) -> t
                 label=module_name,
                 metadata={
                     "path": rel,
-                    "path_depth": depth,
-                    "internal_import_count": internal_count,
-                    "external_import_count": external_count,
+                    "path_depth": len(module_name.split(".")),
+                    "internal_import_count": len(context.internal_imports),
+                    "external_import_count": len(context.external_imports),
                 },
             )
         )
-        edges.append(
-            GraphEdge(
-                source="repository:root",
-                target=f"module:{module_name}",
-                type="contains",
-                metadata={"path": rel},
-            )
-        )
-        for target in sorted(dependencies[module_name]["internal"]):
-            edges.append(
-                GraphEdge(
-                    source=f"module:{module_name}",
-                    target=f"module:{target}",
-                    type="imports",
-                    metadata={},
-                )
-            )
-        for dependency in sorted(dependencies[module_name]["external"]):
+        edges.append(GraphEdge("repository:root", f"module:{module_name}", "contains", {"path": rel}))
+        for target in sorted(context.internal_imports):
+            edges.append(GraphEdge(f"module:{module_name}", f"module:{target}", "imports", {}))
+        for dependency in sorted(context.external_imports):
             external_id = f"external:{dependency}"
             if external_id not in external_nodes:
                 external_nodes[external_id] = GraphNode(
@@ -148,69 +308,281 @@ def build_architecture_graph(snapshot: RepositorySnapshot, repo_root: Path) -> t
                     label=dependency,
                     metadata={"top_level_package": dependency},
                 )
-            edges.append(
-                GraphEdge(
-                    source=f"module:{module_name}",
-                    target=external_id,
-                    type="depends_on",
-                    metadata={},
-                )
-            )
+            edges.append(GraphEdge(f"module:{module_name}", external_id, "depends_on", {}))
 
     nodes.extend(external_nodes.values())
-    graph = ArchitectureGraph(
+    return ArchitectureGraph(
         repository=snapshot.github_url,
         nodes=nodes,
         edges=edges,
         metadata={
-            "module_count": len(modules),
+            "graph_id": "dependency_graph",
+            "title": "Dependency Graph",
+            "module_count": len(contexts),
             "external_dependency_count": len(external_nodes),
         },
     )
-    feature_schema = {
-        "node_features": [
-            "path_depth",
-            "internal_import_count",
-            "external_import_count",
-            "in_degree",
-            "out_degree",
-        ],
-        "edge_types": ["contains", "imports", "depends_on"],
+
+
+def build_architecture_graph(
+    snapshot: RepositorySnapshot,
+    repo_root: Path,
+    contexts: dict[str, ModuleContext],
+) -> ArchitectureGraph:
+    nodes: list[GraphNode] = [
+        GraphNode(
+            id="repository:root",
+            type="repository",
+            label=Path(snapshot.root_path).name,
+            metadata={"branch": snapshot.branch, "commit_sha": snapshot.commit_sha},
+        )
+    ]
+    edges: list[GraphEdge] = []
+
+    package_to_modules: dict[str, list[str]] = defaultdict(list)
+    for module_name, context in contexts.items():
+        package_to_modules[context.package_name].append(module_name)
+
+    for package_name, modules in sorted(package_to_modules.items()):
+        nodes.append(
+            GraphNode(
+                id=f"package:{package_name}",
+                type="package",
+                label=package_name,
+                metadata={"module_count": len(modules)},
+            )
+        )
+        edges.append(GraphEdge("repository:root", f"package:{package_name}", "contains", {}))
+
+    package_edges: set[tuple[str, str]] = set()
+    for module_name, context in sorted(contexts.items()):
+        module_id = f"module:{module_name}"
+        nodes.append(
+            GraphNode(
+                id=module_id,
+                type="module",
+                label=module_name,
+                metadata={"package": context.package_name, "path": compact_path(context.path, repo_root)},
+            )
+        )
+        edges.append(GraphEdge(f"package:{context.package_name}", module_id, "contains", {}))
+        for target in sorted(context.internal_imports):
+            target_package = contexts[target].package_name
+            if target_package != context.package_name:
+                package_edges.add((context.package_name, target_package))
+
+    for source_package, target_package in sorted(package_edges):
+        edges.append(
+            GraphEdge(
+                f"package:{source_package}",
+                f"package:{target_package}",
+                "depends_on",
+                {"cross_package": True},
+            )
+        )
+
+    return ArchitectureGraph(
+        repository=snapshot.github_url,
+        nodes=nodes,
+        edges=edges,
+        metadata={
+            "graph_id": "architecture_graph",
+            "title": "Architecture Graph",
+            "package_count": len(package_to_modules),
+            "cross_package_dependency_count": len(package_edges),
+        },
+    )
+
+
+def build_data_flow_graph(
+    snapshot: RepositorySnapshot,
+    repo_root: Path,
+    contexts: dict[str, ModuleContext],
+) -> ArchitectureGraph:
+    nodes: list[GraphNode] = []
+    edges: list[GraphEdge] = []
+    target_nodes: dict[str, GraphNode] = {}
+
+    for module_name, context in sorted(contexts.items()):
+        module_id = f"module:{module_name}"
+        nodes.append(
+            GraphNode(
+                id=module_id,
+                type="module",
+                label=module_name,
+                metadata={"path": compact_path(context.path, repo_root)},
+            )
+        )
+        for target_name, target_type in sorted(context.data_targets.items()):
+            node_id = f"{target_type}:{target_name}"
+            if node_id not in target_nodes:
+                target_nodes[node_id] = GraphNode(
+                    id=node_id,
+                    type=target_type,
+                    label=target_name,
+                    metadata={"inferred": True},
+                )
+            if context.has_read_behavior:
+                edges.append(GraphEdge(module_id, node_id, "reads_from", {}))
+            if context.has_write_behavior:
+                edges.append(GraphEdge(module_id, node_id, "writes_to", {}))
+            if context.has_emit_behavior:
+                edges.append(GraphEdge(module_id, node_id, "emits_to", {}))
+            if not (context.has_read_behavior or context.has_write_behavior or context.has_emit_behavior):
+                edges.append(GraphEdge(module_id, node_id, "uses", {}))
+
+    nodes.extend(target_nodes.values())
+    return ArchitectureGraph(
+        repository=snapshot.github_url,
+        nodes=nodes,
+        edges=edges,
+        metadata={
+            "graph_id": "data_flow_graph",
+            "title": "Data Flow Graph",
+            "target_count": len(target_nodes),
+        },
+    )
+
+
+def build_interface_graph(
+    snapshot: RepositorySnapshot,
+    repo_root: Path,
+    contexts: dict[str, ModuleContext],
+) -> ArchitectureGraph:
+    nodes: list[GraphNode] = []
+    edges: list[GraphEdge] = []
+    interface_nodes: set[str] = set()
+
+    for module_name, context in sorted(contexts.items()):
+        module_id = f"module:{module_name}"
+        nodes.append(
+            GraphNode(
+                id=module_id,
+                type="module",
+                label=module_name,
+                metadata={"path": compact_path(context.path, repo_root)},
+            )
+        )
+        interface_id = f"interface:{module_name}"
+        interface_nodes.add(interface_id)
+        nodes.append(
+            GraphNode(
+                id=interface_id,
+                type="api",
+                label=module_name,
+                metadata={
+                    "public_symbol_count": len(context.public_symbols),
+                    "entrypoint": context.entrypoint,
+                },
+            )
+        )
+        edges.append(GraphEdge(module_id, interface_id, "implements", {}))
+        if context.entrypoint:
+            entrypoint_id = f"entrypoint:{module_name}"
+            nodes.append(
+                GraphNode(
+                    id=entrypoint_id,
+                    type="entrypoint",
+                    label=module_name,
+                    metadata={"path": compact_path(context.path, repo_root)},
+                )
+            )
+            edges.append(GraphEdge(entrypoint_id, interface_id, "calls", {"entrypoint": True}))
+
+    for module_name, context in sorted(contexts.items()):
+        for target in sorted(context.internal_imports):
+            target_interface = f"interface:{target}"
+            if target_interface in interface_nodes:
+                edges.append(GraphEdge(f"module:{module_name}", target_interface, "calls", {}))
+
+    return ArchitectureGraph(
+        repository=snapshot.github_url,
+        nodes=nodes,
+        edges=edges,
+        metadata={
+            "graph_id": "interface_graph",
+            "title": "Interface Graph",
+            "interface_count": len(interface_nodes),
+        },
+    )
+
+
+def build_operational_risk_graph(
+    snapshot: RepositorySnapshot,
+    repo_root: Path,
+    contexts: dict[str, ModuleContext],
+) -> ArchitectureGraph:
+    nodes: list[GraphNode] = []
+    edges: list[GraphEdge] = []
+    capability_nodes = {
+        "capability:observability": ("metric", "observability"),
+        "capability:authentication": ("security_capability", "authentication"),
+        "capability:secret_handling": ("security_capability", "secret_handling"),
+        "capability:data_protection": ("security_capability", "data_protection"),
+    }
+
+    for node_id, (node_type, label) in capability_nodes.items():
+        nodes.append(GraphNode(node_id, node_type, label, {}))
+
+    for module_name, context in sorted(contexts.items()):
+        module_id = f"module:{module_name}"
+        nodes.append(
+            GraphNode(
+                id=module_id,
+                type="module",
+                label=module_name,
+                metadata={"path": compact_path(context.path, repo_root)},
+            )
+        )
+        if context.has_observability:
+            edges.append(GraphEdge(module_id, "capability:observability", "evaluated_by", {}))
+        if context.has_auth:
+            edges.append(GraphEdge(module_id, "capability:authentication", "uses", {}))
+        if context.has_secret_handling:
+            edges.append(GraphEdge(module_id, "capability:secret_handling", "uses", {}))
+        if context.has_data_protection:
+            edges.append(GraphEdge(module_id, "capability:data_protection", "uses", {}))
+
+    return ArchitectureGraph(
+        repository=snapshot.github_url,
+        nodes=nodes,
+        edges=edges,
+        metadata={
+            "graph_id": "operational_risk_graph",
+            "title": "Operational Risk Graph",
+            "module_count": len(contexts),
+        },
+    )
+
+
+def feature_schema_for_graph(graph: ArchitectureGraph) -> dict[str, Any]:
+    return {
+        "graph_id": graph.metadata.get("graph_id"),
+        "node_features": ["in_degree", "out_degree", "path_depth", "public_symbol_count"],
+        "edge_types": sorted({edge.type for edge in graph.edges}),
         "schema_version": 1,
     }
-    inventory = {
-        "modules": {
-            module: {
-                "path": compact_path(path, repo_root),
-                "internal_imports": sorted(dependencies[module]["internal"]),
-                "external_imports": sorted(dependencies[module]["external"]),
-            }
-            for module, path in modules.items()
-        }
-    }
-    return graph, feature_schema, inventory
 
 
 def encode_pyg(graph: ArchitectureGraph) -> dict[str, Any]:
-    module_ids = [node.id for node in graph.nodes if node.type == "module"]
-    external_ids = [node.id for node in graph.nodes if node.type == "external_dependency"]
-    features: dict[str, list[list[int]]] = defaultdict(list)
     node_index = {node.id: idx for idx, node in enumerate(graph.nodes)}
-
     in_degree = defaultdict(int)
     out_degree = defaultdict(int)
     for edge in graph.edges:
         out_degree[edge.source] += 1
         in_degree[edge.target] += 1
 
+    features: dict[str, list[list[int]]] = defaultdict(list)
+    node_ids_by_type: dict[str, list[str]] = defaultdict(list)
+    node_offsets: dict[str, dict[str, int]] = defaultdict(dict)
     for node in graph.nodes:
-        if node.type not in {"module", "external_dependency", "repository"}:
-            continue
-        features[node.type].append(
+        node_type = node.type
+        node_offsets[node_type][node.id] = len(node_ids_by_type[node_type])
+        node_ids_by_type[node_type].append(node.id)
+        features[node_type].append(
             [
                 int(node.metadata.get("path_depth", 0)),
-                int(node.metadata.get("internal_import_count", 0)),
-                int(node.metadata.get("external_import_count", 0)),
+                int(node.metadata.get("public_symbol_count", 0)),
                 in_degree[node.id],
                 out_degree[node.id],
             ]
@@ -218,16 +590,16 @@ def encode_pyg(graph: ArchitectureGraph) -> dict[str, Any]:
 
     edge_index: dict[str, list[list[int]]] = defaultdict(lambda: [[], []])
     for edge in graph.edges:
-        key = f"{edge.source.split(':', 1)[0]}::{edge.type}::{edge.target.split(':', 1)[0]}"
-        edge_index[key][0].append(node_index[edge.source])
-        edge_index[key][1].append(node_index[edge.target])
+        src_type = next(node.type for node in graph.nodes if node.id == edge.source)
+        dst_type = next(node.type for node in graph.nodes if node.id == edge.target)
+        key = f"{src_type}::{edge.type}::{dst_type}"
+        edge_index[key][0].append(node_offsets[src_type][edge.source])
+        edge_index[key][1].append(node_offsets[dst_type][edge.target])
 
     payload = {
         "backend": "fallback-json",
-        "node_types": {
-            "module": module_ids,
-            "external_dependency": external_ids,
-        },
+        "graph_id": graph.metadata.get("graph_id"),
+        "node_types": dict(node_ids_by_type),
         "features": dict(features),
         "edge_index": dict(edge_index),
     }
@@ -254,7 +626,7 @@ def save_pyg_payload(payload: Any, path: Path) -> None:
         import torch
         from torch_geometric.data import HeteroData
 
-        if isinstance(payload, HeteroData):
+        if payload.__class__.__name__ == "HeteroData":
             path.parent.mkdir(parents=True, exist_ok=True)
             torch.save(payload, path)
             return

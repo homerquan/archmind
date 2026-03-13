@@ -1,0 +1,85 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 842 595] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 1818 >>
+stream
+q
+0.98 0.99 1 rg 0 0 842 595 re f
+BT /F1 18 Tf 36 560 Td (Architecture Graph) Tj ET
+BT /F1 10 Tf 36 542 Td (architecture_graph) Tj ET
+0.72 0.78 0.85 RG 1 w
+421.00 537.00 m 611.40 277.50 l S
+0.72 0.78 0.85 RG 1 w
+611.40 277.50 m 566.85 399.89 l S
+0.72 0.78 0.85 RG 1 w
+611.40 277.50 m 454.06 465.01 l S
+0.72 0.78 0.85 RG 1 w
+611.40 277.50 m 325.80 442.39 l S
+0.72 0.78 0.85 RG 1 w
+611.40 277.50 m 242.08 342.62 l S
+0.72 0.78 0.85 RG 1 w
+611.40 277.50 m 242.08 212.38 l S
+0.72 0.78 0.85 RG 1 w
+611.40 277.50 m 325.80 112.61 l S
+0.72 0.78 0.85 RG 1 w
+611.40 277.50 m 454.06 89.99 l S
+0.72 0.78 0.85 RG 1 w
+611.40 277.50 m 566.85 155.11 l S
+0.85 0.88 0.92 rg 0.16 0.2 0.3 RG 1 w
+376.00 525.00 90 24 re B
+BT /F1 8 Tf 382.00 533.00 Td (repo) Tj ET
+0.85 0.88 0.92 rg 0.16 0.2 0.3 RG 1 w
+566.40 265.50 90 24 re B
+BT /F1 8 Tf 572.40 273.50 Td (server) Tj ET
+0.74 0.87 0.97 rg 0.16 0.2 0.3 RG 1 w
+521.85 387.89 90 24 re B
+BT /F1 8 Tf 527.85 395.89 Td (server.gemini_live) Tj ET
+0.74 0.87 0.97 rg 0.16 0.2 0.3 RG 1 w
+409.06 453.01 90 24 re B
+BT /F1 8 Tf 415.06 461.01 Td (server.main) Tj ET
+0.74 0.87 0.97 rg 0.16 0.2 0.3 RG 1 w
+280.80 430.39 90 24 re B
+BT /F1 8 Tf 286.80 438.39 Td (server.progress_tra...) Tj ET
+0.74 0.87 0.97 rg 0.16 0.2 0.3 RG 1 w
+197.08 330.62 90 24 re B
+BT /F1 8 Tf 203.08 338.62 Td (server.tests.test_g...) Tj ET
+0.74 0.87 0.97 rg 0.16 0.2 0.3 RG 1 w
+197.08 200.38 90 24 re B
+BT /F1 8 Tf 203.08 208.38 Td (server.tests.test_m...) Tj ET
+0.74 0.87 0.97 rg 0.16 0.2 0.3 RG 1 w
+280.80 100.61 90 24 re B
+BT /F1 8 Tf 286.80 108.61 Td (server.tests.test_m...) Tj ET
+0.74 0.87 0.97 rg 0.16 0.2 0.3 RG 1 w
+409.06 77.99 90 24 re B
+BT /F1 8 Tf 415.06 85.99 Td (server.tests.test_m...) Tj ET
+0.74 0.87 0.97 rg 0.16 0.2 0.3 RG 1 w
+521.85 143.11 90 24 re B
+BT /F1 8 Tf 527.85 151.11 Td (server.tests.test_m...) Tj ET
+Q
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000000317 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2186
+%%EOF

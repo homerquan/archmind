@@ -1,0 +1,6 @@
+{
+  "branch": "main",
+  "github_url": "https://github.com/homerquan/AIQToolkit",
+  "llm_provider": "gemini",
+  "output_dir": "result"
+}

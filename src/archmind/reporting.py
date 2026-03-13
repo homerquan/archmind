@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 from archmind.models import ArchitectureRequest, LLMConfig, RepositorySnapshot
 from archmind.utils import ensure_dir, write_text
@@ -10,13 +11,10 @@ def render_report(
     snapshot: RepositorySnapshot,
     request: ArchitectureRequest,
     llm_config: LLMConfig,
-    metrics: dict,
-    findings: list[dict],
-    explanations_markdown: str,
+    graph_results: dict[str, dict[str, Any]],
+    issue_assessments: list[dict[str, Any]],
+    issue_summary: dict[str, Any],
 ) -> str:
-    findings_md = "\n".join(
-        f"- **{item['kind']}** ({item['severity']}): {item['summary']}" for item in findings
-    ) or "- No findings."
     lines = [
         "# ArchMind Report",
         "",
@@ -29,28 +27,38 @@ def render_report(
         f"- LLM model: `{llm_config.model}`",
         f"- API key source: `{llm_config.api_key_source}`",
         "",
-        "## Summary Metrics",
-        f"- Modules analyzed: `{metrics['module_count']}`",
-        f"- Dependency edges: `{metrics['edge_count']}`",
-        f"- Cycle count: `{metrics['cycle_count']}`",
-        f"- Articulation points: `{len(metrics['articulation_points'])}`",
+        "## Issue Summary",
+        f"- Total issues inspected: `{issue_summary['issue_count']}`",
+        f"- High severity: `{issue_summary['high_severity_count']}`",
+        f"- Medium severity: `{issue_summary['medium_severity_count']}`",
+        f"- Low severity: `{issue_summary['low_severity_count']}`",
         "",
-        "## Findings",
-        findings_md,
-        "",
-        explanations_markdown.strip(),
-        "",
+        "## Graphs Generated",
     ]
+
+    for graph_id, result in graph_results.items():
+        metrics = result["metrics"]
+        lines.append(
+            f"- `{graph_id}`: nodes=`{metrics.get('node_count', 0)}`, "
+            f"edges=`{metrics.get('edge_count', 0)}`"
+        )
+
+    lines.extend(["", "## Issue Assessments"])
+    for assessment in issue_assessments:
+        lines.append("")
+        lines.append(assessment["markdown"].strip())
     return "\n".join(lines).strip() + "\n"
 
 
-def terminal_summary(snapshot: RepositorySnapshot, metrics: dict, findings: list[dict]) -> str:
-    top = findings[0]["summary"] if findings else "No major structural findings detected."
+def terminal_summary(snapshot: RepositorySnapshot, graph_results: dict[str, dict[str, Any]], issue_summary: dict[str, Any]) -> str:
+    dependency_metrics = graph_results.get("dependency_graph", {}).get("metrics", {})
     return (
         f"Repository: {snapshot.github_url}\n"
         f"Branch: {snapshot.branch} @ {snapshot.commit_sha[:12]}\n"
-        f"Modules: {metrics['module_count']} | Edges: {metrics['edge_count']} | Cycles: {metrics['cycle_count']}\n"
-        f"Top finding: {top}"
+        f"Dependency modules: {dependency_metrics.get('module_count', 0)} | "
+        f"Cycles: {dependency_metrics.get('cycle_count', 0)}\n"
+        f"Issues: high={issue_summary['high_severity_count']}, "
+        f"medium={issue_summary['medium_severity_count']}, low={issue_summary['low_severity_count']}"
     )
 
 

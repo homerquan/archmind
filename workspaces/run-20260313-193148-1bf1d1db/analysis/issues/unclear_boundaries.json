@@ -1,0 +1,18 @@
+{
+  "evidence": [
+    "Cross-package dependencies: 0",
+    "Boundary hotspots: package:server"
+  ],
+  "graphs_used": [
+    "architecture_graph",
+    "dependency_graph",
+    "interface_graph"
+  ],
+  "id": "unclear_boundaries",
+  "recommendations": [
+    "Clarify package ownership and narrow cross-boundary dependencies."
+  ],
+  "severity": "low",
+  "summary": "The system does not clearly define what responsibility belongs to each component.",
+  "title": "Unclear Service or Module Boundaries"
+}

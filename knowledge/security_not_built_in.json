@@ -1,0 +1,44 @@
+{
+  "id": "security_not_built_in",
+  "title": "Security Not Built Into the Architecture",
+  "summary": "Authentication, authorization, trust boundaries, secret handling, and data protection are treated as afterthoughts.",
+  "inspection_goal": "Inspect whether trust boundaries and security-sensitive paths are explicit and structurally respected.",
+  "why_it_matters": [
+    "Creates systemic risk",
+    "Makes later remediation expensive",
+    "Expands blast radius of compromise"
+  ],
+  "graph_focus": {
+    "node_types": ["service", "api", "database", "infra_component", "queue", "external_dependency"],
+    "edge_types": ["calls", "depends_on", "reads_from", "writes_to", "uses"]
+  },
+  "primary_signals": [
+    "Sensitive stores directly reachable from many components",
+    "Cross-boundary calls without clear trust mediation",
+    "Security-sensitive responsibilities embedded in unrelated modules",
+    "Secret or identity handling concentrated in ad hoc locations"
+  ],
+  "inspection_questions": [
+    "Where are the trust boundaries in this graph?",
+    "Which components touch sensitive data or identity flows?",
+    "Are access paths narrower than data sensitivity would require?",
+    "Does security logic appear centralized and explicit or scattered and implicit?"
+  ],
+  "evidence_to_collect": [
+    "Dependency paths into sensitive components",
+    "Breadth of access to databases or external systems",
+    "Context clues around auth, secret, and policy handling",
+    "Boundary analysis around externally exposed nodes"
+  ],
+  "recommendation_patterns": [
+    "Make trust boundaries explicit",
+    "Centralize security-sensitive capabilities behind stable interfaces",
+    "Reduce broad access to sensitive stores and operations",
+    "Separate security policy enforcement from unrelated application logic"
+  ],
+  "severity_guidance": {
+    "high": "Security-sensitive paths are broad, implicit, and structurally hard to contain.",
+    "medium": "Important controls exist but boundaries are inconsistent.",
+    "low": "Security responsibilities appear explicit and structurally bounded."
+  }
+}

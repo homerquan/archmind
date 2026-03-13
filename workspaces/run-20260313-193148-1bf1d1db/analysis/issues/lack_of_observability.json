@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "Observability coverage: 0.5"
+  ],
+  "graphs_used": [
+    "operational_risk_graph"
+  ],
+  "id": "lack_of_observability",
+  "recommendations": [
+    "Add logging, metrics, or tracing to poorly instrumented modules."
+  ],
+  "severity": "low",
+  "summary": "The system was not designed with sufficient logging, metrics, tracing, and diagnosability.",
+  "title": "Lack of Observability"
+}

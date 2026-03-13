@@ -1,0 +1,614 @@
+{
+  "edges": [
+    {
+      "metadata": {
+        "path": "server/gemini_live.py"
+      },
+      "source": "repository:root",
+      "target": "module:server.gemini_live",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.gemini_live",
+      "target": "external:asyncio",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.gemini_live",
+      "target": "external:google",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.gemini_live",
+      "target": "external:inspect",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.gemini_live",
+      "target": "external:logging",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {
+        "path": "server/main.py"
+      },
+      "source": "repository:root",
+      "target": "module:server.main",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.main",
+      "target": "external:argparse",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.main",
+      "target": "external:asyncio",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.main",
+      "target": "external:base64",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.main",
+      "target": "external:contextlib",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.main",
+      "target": "external:dotenv",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.main",
+      "target": "external:fastapi",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.main",
+      "target": "external:gemini_live",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.main",
+      "target": "external:json",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.main",
+      "target": "external:logging",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.main",
+      "target": "external:os",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.main",
+      "target": "external:pathlib",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.main",
+      "target": "external:progress_tracker",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.main",
+      "target": "external:uvicorn",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {
+        "path": "server/progress_tracker.py"
+      },
+      "source": "repository:root",
+      "target": "module:server.progress_tracker",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.progress_tracker",
+      "target": "external:collections",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.progress_tracker",
+      "target": "external:copy",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.progress_tracker",
+      "target": "external:re",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.progress_tracker",
+      "target": "external:threading",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.progress_tracker",
+      "target": "external:time",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {
+        "path": "server/tests/test_gemini_live.py"
+      },
+      "source": "repository:root",
+      "target": "module:server.tests.test_gemini_live",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_gemini_live",
+      "target": "external:asyncio",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_gemini_live",
+      "target": "external:gemini_live",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_gemini_live",
+      "target": "external:pathlib",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_gemini_live",
+      "target": "external:sys",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {
+        "path": "server/tests/test_main_logging.py"
+      },
+      "source": "repository:root",
+      "target": "module:server.tests.test_main_logging",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_logging",
+      "target": "external:importlib",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_logging",
+      "target": "external:logging",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_logging",
+      "target": "external:pathlib",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_logging",
+      "target": "external:sys",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {
+        "path": "server/tests/test_main_memory.py"
+      },
+      "source": "repository:root",
+      "target": "module:server.tests.test_main_memory",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_memory",
+      "target": "external:importlib",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_memory",
+      "target": "external:pathlib",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_memory",
+      "target": "external:sys",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {
+        "path": "server/tests/test_main_routes.py"
+      },
+      "source": "repository:root",
+      "target": "module:server.tests.test_main_routes",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_routes",
+      "target": "external:fastapi",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_routes",
+      "target": "external:importlib",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_routes",
+      "target": "external:pathlib",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_routes",
+      "target": "external:sys",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {
+        "path": "server/tests/test_main_websocket.py"
+      },
+      "source": "repository:root",
+      "target": "module:server.tests.test_main_websocket",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_websocket",
+      "target": "external:asyncio",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_websocket",
+      "target": "external:fastapi",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_websocket",
+      "target": "external:importlib",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_websocket",
+      "target": "external:json",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_websocket",
+      "target": "external:logging",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_websocket",
+      "target": "external:pathlib",
+      "type": "depends_on"
+    },
+    {
+      "metadata": {},
+      "source": "module:server.tests.test_main_websocket",
+      "target": "external:sys",
+      "type": "depends_on"
+    }
+  ],
+  "metadata": {
+    "external_dependency_count": 22,
+    "graph_id": "dependency_graph",
+    "module_count": 8,
+    "title": "Dependency Graph"
+  },
+  "nodes": [
+    {
+      "id": "repository:root",
+      "label": "repo",
+      "metadata": {
+        "branch": "main",
+        "commit_sha": "5e57888d10f0ace760154182e388af9a654a538e"
+      },
+      "type": "repository"
+    },
+    {
+      "id": "module:server.gemini_live",
+      "label": "server.gemini_live",
+      "metadata": {
+        "external_import_count": 4,
+        "internal_import_count": 0,
+        "path": "server/gemini_live.py",
+        "path_depth": 2
+      },
+      "type": "module"
+    },
+    {
+      "id": "module:server.main",
+      "label": "server.main",
+      "metadata": {
+        "external_import_count": 13,
+        "internal_import_count": 0,
+        "path": "server/main.py",
+        "path_depth": 2
+      },
+      "type": "module"
+    },
+    {
+      "id": "module:server.progress_tracker",
+      "label": "server.progress_tracker",
+      "metadata": {
+        "external_import_count": 5,
+        "internal_import_count": 0,
+        "path": "server/progress_tracker.py",
+        "path_depth": 2
+      },
+      "type": "module"
+    },
+    {
+      "id": "module:server.tests.test_gemini_live",
+      "label": "server.tests.test_gemini_live",
+      "metadata": {
+        "external_import_count": 4,
+        "internal_import_count": 0,
+        "path": "server/tests/test_gemini_live.py",
+        "path_depth": 3
+      },
+      "type": "module"
+    },
+    {
+      "id": "module:server.tests.test_main_logging",
+      "label": "server.tests.test_main_logging",
+      "metadata": {
+        "external_import_count": 4,
+        "internal_import_count": 0,
+        "path": "server/tests/test_main_logging.py",
+        "path_depth": 3
+      },
+      "type": "module"
+    },
+    {
+      "id": "module:server.tests.test_main_memory",
+      "label": "server.tests.test_main_memory",
+      "metadata": {
+        "external_import_count": 3,
+        "internal_import_count": 0,
+        "path": "server/tests/test_main_memory.py",
+        "path_depth": 3
+      },
+      "type": "module"
+    },
+    {
+      "id": "module:server.tests.test_main_routes",
+      "label": "server.tests.test_main_routes",
+      "metadata": {
+        "external_import_count": 4,
+        "internal_import_count": 0,
+        "path": "server/tests/test_main_routes.py",
+        "path_depth": 3
+      },
+      "type": "module"
+    },
+    {
+      "id": "module:server.tests.test_main_websocket",
+      "label": "server.tests.test_main_websocket",
+      "metadata": {
+        "external_import_count": 7,
+        "internal_import_count": 0,
+        "path": "server/tests/test_main_websocket.py",
+        "path_depth": 3
+      },
+      "type": "module"
+    },
+    {
+      "id": "external:asyncio",
+      "label": "asyncio",
+      "metadata": {
+        "top_level_package": "asyncio"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:google",
+      "label": "google",
+      "metadata": {
+        "top_level_package": "google"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:inspect",
+      "label": "inspect",
+      "metadata": {
+        "top_level_package": "inspect"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:logging",
+      "label": "logging",
+      "metadata": {
+        "top_level_package": "logging"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:argparse",
+      "label": "argparse",
+      "metadata": {
+        "top_level_package": "argparse"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:base64",
+      "label": "base64",
+      "metadata": {
+        "top_level_package": "base64"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:contextlib",
+      "label": "contextlib",
+      "metadata": {
+        "top_level_package": "contextlib"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:dotenv",
+      "label": "dotenv",
+      "metadata": {
+        "top_level_package": "dotenv"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:fastapi",
+      "label": "fastapi",
+      "metadata": {
+        "top_level_package": "fastapi"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:gemini_live",
+      "label": "gemini_live",
+      "metadata": {
+        "top_level_package": "gemini_live"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:json",
+      "label": "json",
+      "metadata": {
+        "top_level_package": "json"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:os",
+      "label": "os",
+      "metadata": {
+        "top_level_package": "os"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:pathlib",
+      "label": "pathlib",
+      "metadata": {
+        "top_level_package": "pathlib"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:progress_tracker",
+      "label": "progress_tracker",
+      "metadata": {
+        "top_level_package": "progress_tracker"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:uvicorn",
+      "label": "uvicorn",
+      "metadata": {
+        "top_level_package": "uvicorn"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:collections",
+      "label": "collections",
+      "metadata": {
+        "top_level_package": "collections"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:copy",
+      "label": "copy",
+      "metadata": {
+        "top_level_package": "copy"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:re",
+      "label": "re",
+      "metadata": {
+        "top_level_package": "re"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:threading",
+      "label": "threading",
+      "metadata": {
+        "top_level_package": "threading"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:time",
+      "label": "time",
+      "metadata": {
+        "top_level_package": "time"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:sys",
+      "label": "sys",
+      "metadata": {
+        "top_level_package": "sys"
+      },
+      "type": "external_dependency"
+    },
+    {
+      "id": "external:importlib",
+      "label": "importlib",
+      "metadata": {
+        "top_level_package": "importlib"
+      },
+      "type": "external_dependency"
+    }
+  ],
+  "repository": "https://github.com/homerquan/ApronAI"
+}

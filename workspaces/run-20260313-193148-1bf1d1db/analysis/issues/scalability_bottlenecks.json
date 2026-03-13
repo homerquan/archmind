@@ -1,0 +1,17 @@
+{
+  "evidence": [
+    "Shared flow targets: none",
+    "Top dependency hotspots: module:server.tests.test_main_websocket, module:server.tests.test_main_routes, module:server.tests.test_main_memory"
+  ],
+  "graphs_used": [
+    "data_flow_graph",
+    "dependency_graph"
+  ],
+  "id": "scalability_bottlenecks",
+  "recommendations": [
+    "Reduce central chokepoints and shorten synchronous dependency paths."
+  ],
+  "severity": "medium",
+  "summary": "The architecture contains centralized or blocking components that limit growth.",
+  "title": "Scalability Bottlenecks"
+}

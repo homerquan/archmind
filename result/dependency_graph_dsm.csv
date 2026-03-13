@@ -1,0 +1,9 @@
+module,module:server.gemini_live,module:server.main,module:server.progress_tracker,module:server.tests.test_gemini_live,module:server.tests.test_main_logging,module:server.tests.test_main_memory,module:server.tests.test_main_routes,module:server.tests.test_main_websocket
+module:server.gemini_live,0,0,0,0,0,0,0,0
+module:server.main,0,0,0,0,0,0,0,0
+module:server.progress_tracker,0,0,0,0,0,0,0,0
+module:server.tests.test_gemini_live,0,0,0,0,0,0,0,0
+module:server.tests.test_main_logging,0,0,0,0,0,0,0,0
+module:server.tests.test_main_memory,0,0,0,0,0,0,0,0
+module:server.tests.test_main_routes,0,0,0,0,0,0,0,0
+module:server.tests.test_main_websocket,0,0,0,0,0,0,0,0

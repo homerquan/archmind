@@ -1,0 +1,168 @@
+[
+  {
+    "evidence": [
+      "Dependency cycles: 0",
+      "Top coupled modules: module:server.tests.test_main_websocket, module:server.tests.test_main_routes, module:server.tests.test_main_memory"
+    ],
+    "graphs_used": [
+      "architecture_graph",
+      "dependency_graph",
+      "interface_graph"
+    ],
+    "id": "tight_coupling",
+    "recommendations": [
+      "Break cycles and reduce dependence on the hottest modules."
+    ],
+    "severity": "medium",
+    "summary": "Modules or services depend too heavily on each other, so a small change in one area can break many others.",
+    "title": "Tight Coupling"
+  },
+  {
+    "evidence": [
+      "Cross-package dependencies: 0",
+      "Boundary hotspots: package:server"
+    ],
+    "graphs_used": [
+      "architecture_graph",
+      "dependency_graph",
+      "interface_graph"
+    ],
+    "id": "unclear_boundaries",
+    "recommendations": [
+      "Clarify package ownership and narrow cross-boundary dependencies."
+    ],
+    "severity": "low",
+    "summary": "The system does not clearly define what responsibility belongs to each component.",
+    "title": "Unclear Service or Module Boundaries"
+  },
+  {
+    "evidence": [
+      "Highest dependency span: 0",
+      "Modules with broad span: module:server.tests.test_main_websocket, module:server.tests.test_main_routes, module:server.tests.test_main_memory"
+    ],
+    "graphs_used": [
+      "architecture_graph",
+      "dependency_graph"
+    ],
+    "id": "low_cohesion",
+    "recommendations": [
+      "Split overly broad modules into more focused units."
+    ],
+    "severity": "low",
+    "summary": "A module or service handles too many unrelated responsibilities.",
+    "title": "Low Cohesion"
+  },
+  {
+    "evidence": [
+      "Mixed concern modules: none"
+    ],
+    "graphs_used": [
+      "architecture_graph",
+      "data_flow_graph"
+    ],
+    "id": "poor_separation_of_concerns",
+    "recommendations": [
+      "Separate domain logic from persistence and transport concerns."
+    ],
+    "severity": "low",
+    "summary": "Business logic, infrastructure code, UI behavior, and data access are mixed together.",
+    "title": "Poor Separation of Concerns"
+  },
+  {
+    "evidence": [
+      "Chatty or highly consumed interfaces: none"
+    ],
+    "graphs_used": [
+      "interface_graph"
+    ],
+    "id": "bad_interface_api_design",
+    "recommendations": [
+      "Simplify and stabilize heavily consumed interface surfaces."
+    ],
+    "severity": "low",
+    "summary": "Interfaces are inconsistent, overly complex, too chatty, or leak internal implementation details.",
+    "title": "Bad Interface / API Design"
+  },
+  {
+    "evidence": [
+      "Multi-writer targets: none"
+    ],
+    "graphs_used": [
+      "data_flow_graph"
+    ],
+    "id": "data_ownership_confusion",
+    "recommendations": [
+      "Assign a clear owner for each shared data target."
+    ],
+    "severity": "low",
+    "summary": "Multiple services or modules read and write the same data without a clear owner.",
+    "title": "Data Ownership and Source-of-Truth Confusion"
+  },
+  {
+    "evidence": [
+      "Shared flow targets: none",
+      "Top dependency hotspots: module:server.tests.test_main_websocket, module:server.tests.test_main_routes, module:server.tests.test_main_memory"
+    ],
+    "graphs_used": [
+      "data_flow_graph",
+      "dependency_graph"
+    ],
+    "id": "scalability_bottlenecks",
+    "recommendations": [
+      "Reduce central chokepoints and shorten synchronous dependency paths."
+    ],
+    "severity": "medium",
+    "summary": "The architecture contains centralized or blocking components that limit growth.",
+    "title": "Scalability Bottlenecks"
+  },
+  {
+    "evidence": [
+      "Articulation points: none",
+      "Cycle count: 0"
+    ],
+    "graphs_used": [
+      "data_flow_graph",
+      "dependency_graph",
+      "interface_graph",
+      "operational_risk_graph"
+    ],
+    "id": "weak_fault_isolation",
+    "recommendations": [
+      "Introduce isolation boundaries around bridge nodes and cycle-heavy paths."
+    ],
+    "severity": "low",
+    "summary": "Failures in one component easily spread to others, causing cascading outages.",
+    "title": "Weak Fault Isolation"
+  },
+  {
+    "evidence": [
+      "Observability coverage: 0.5"
+    ],
+    "graphs_used": [
+      "operational_risk_graph"
+    ],
+    "id": "lack_of_observability",
+    "recommendations": [
+      "Add logging, metrics, or tracing to poorly instrumented modules."
+    ],
+    "severity": "low",
+    "summary": "The system was not designed with sufficient logging, metrics, tracing, and diagnosability.",
+    "title": "Lack of Observability"
+  },
+  {
+    "evidence": [
+      "Security capability coverage: 0.625"
+    ],
+    "graphs_used": [
+      "data_flow_graph",
+      "operational_risk_graph"
+    ],
+    "id": "security_not_built_in",
+    "recommendations": [
+      "Make trust boundaries and security-sensitive paths explicit."
+    ],
+    "severity": "low",
+    "summary": "Authentication, authorization, trust boundaries, secret handling, and data protection are treated as afterthoughts.",
+    "title": "Security Not Built Into the Architecture"
+  }
+]

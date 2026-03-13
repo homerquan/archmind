@@ -1,0 +1,41 @@
+{
+  "id": "poor_separation_of_concerns",
+  "title": "Poor Separation of Concerns",
+  "summary": "Business logic, infrastructure code, UI behavior, and data access are mixed together.",
+  "inspection_goal": "Detect architectural areas where concerns that should remain distinct are structurally entangled.",
+  "why_it_matters": [
+    "Raises change risk and side effects",
+    "Makes testing and replacement harder",
+    "Weakens maintainability"
+  ],
+  "graph_focus": {
+    "node_types": ["module", "package", "service", "api", "database", "file"],
+    "edge_types": ["imports", "depends_on", "calls", "reads_from", "writes_to", "uses"]
+  },
+  "primary_signals": [
+    "UI-facing modules depend directly on persistence layers",
+    "Domain modules depend directly on framework or transport code",
+    "Infrastructure modules appear on critical business paths",
+    "Many layers collapse into direct edges without mediation"
+  ],
+  "inspection_questions": [
+    "Are domain concerns isolated from infrastructure details?",
+    "Do modules cross several architectural layers directly?",
+    "Where are boundaries between application, domain, and data access blurred?"
+  ],
+  "evidence_to_collect": [
+    "Path analysis across inferred layers",
+    "Dependency edges between mismatched concern types",
+    "Hotspots where multiple concern categories intersect"
+  ],
+  "recommendation_patterns": [
+    "Introduce adapter or service boundaries",
+    "Move infrastructure logic behind interfaces",
+    "Re-layer components to reduce cross-layer leakage"
+  ],
+  "severity_guidance": {
+    "high": "Layering is broadly collapsed and business logic depends directly on low-level details.",
+    "medium": "Concern mixing is localized but structurally visible.",
+    "low": "Most layers are separated, with only isolated leaks."
+  }
+}

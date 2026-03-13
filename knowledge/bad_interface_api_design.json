@@ -1,0 +1,44 @@
+{
+  "id": "bad_interface_api_design",
+  "title": "Bad Interface / API Design",
+  "summary": "Interfaces are inconsistent, overly complex, too chatty, or leak internal implementation details.",
+  "inspection_goal": "Inspect dependency surfaces and communication patterns for fragile, overly coupled, or leaky interfaces.",
+  "why_it_matters": [
+    "Creates brittle integration points",
+    "Amplifies cross-team coordination cost",
+    "Leaks implementation details into consumers"
+  ],
+  "graph_focus": {
+    "node_types": ["api", "service", "module", "external_dependency"],
+    "edge_types": ["calls", "depends_on", "uses", "implements"]
+  },
+  "primary_signals": [
+    "Many consumers depend on unstable or low-level interface nodes",
+    "Chatty dependency chains between the same components",
+    "Consumers depend on many fine-grained endpoints or symbols",
+    "Interface nodes expose implementation-specific dependencies downstream"
+  ],
+  "inspection_questions": [
+    "Which interfaces attract many consumers while changing frequently?",
+    "Are dependencies too granular or too chatty?",
+    "Do interfaces expose internal implementation concepts?",
+    "Do consumers depend on details instead of stable contracts?"
+  ],
+  "evidence_to_collect": [
+    "Consumer counts per interface node",
+    "Edge density around API-facing nodes",
+    "Dependency fan-out behind interface nodes",
+    "Call-chain depth between major components"
+  ],
+  "recommendation_patterns": [
+    "Stabilize and simplify public contracts",
+    "Reduce chatty interactions with coarser operations",
+    "Hide internals behind explicit DTOs or adapter layers",
+    "Version or isolate unstable interfaces"
+  ],
+  "severity_guidance": {
+    "high": "Key interfaces are both widely consumed and structurally leaky.",
+    "medium": "Some interface surfaces are noisy or unstable but containable.",
+    "low": "Most interfaces are clear, with a few awkward integration points."
+  }
+}

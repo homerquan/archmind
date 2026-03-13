@@ -1,0 +1,156 @@
+{
+  "edges": [
+    {
+      "metadata": {},
+      "source": "repository:root",
+      "target": "package:server",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "package:server",
+      "target": "module:server.gemini_live",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "package:server",
+      "target": "module:server.main",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "package:server",
+      "target": "module:server.progress_tracker",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "package:server",
+      "target": "module:server.tests.test_gemini_live",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "package:server",
+      "target": "module:server.tests.test_main_logging",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "package:server",
+      "target": "module:server.tests.test_main_memory",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "package:server",
+      "target": "module:server.tests.test_main_routes",
+      "type": "contains"
+    },
+    {
+      "metadata": {},
+      "source": "package:server",
+      "target": "module:server.tests.test_main_websocket",
+      "type": "contains"
+    }
+  ],
+  "metadata": {
+    "cross_package_dependency_count": 0,
+    "graph_id": "architecture_graph",
+    "package_count": 1,
+    "title": "Architecture Graph"
+  },
+  "nodes": [
+    {
+      "id": "repository:root",
+      "label": "repo",
+      "metadata": {
+        "branch": "main",
+        "commit_sha": "5e57888d10f0ace760154182e388af9a654a538e"
+      },
+      "type": "repository"
+    },
+    {
+      "id": "package:server",
+      "label": "server",
+      "metadata": {
+        "module_count": 8
+      },
+      "type": "package"
+    },
+    {
+      "id": "module:server.gemini_live",
+      "label": "server.gemini_live",
+      "metadata": {
+        "package": "server",
+        "path": "server/gemini_live.py"
+      },
+      "type": "module"
+    },
+    {
+      "id": "module:server.main",
+      "label": "server.main",
+      "metadata": {
+        "package": "server",
+        "path": "server/main.py"
+      },
+      "type": "module"
+    },
+    {
+      "id": "module:server.progress_tracker",
+      "label": "server.progress_tracker",
+      "metadata": {
+        "package": "server",
+        "path": "server/progress_tracker.py"
+      },
+      "type": "module"
+    },
+    {
+      "id": "module:server.tests.test_gemini_live",
+      "label": "server.tests.test_gemini_live",
+      "metadata": {
+        "package": "server",
+        "path": "server/tests/test_gemini_live.py"
+      },
+      "type": "module"
+    },
+    {
+      "id": "module:server.tests.test_main_logging",
+      "label": "server.tests.test_main_logging",
+      "metadata": {
+        "package": "server",
+        "path": "server/tests/test_main_logging.py"
+      },
+      "type": "module"
+    },
+    {
+      "id": "module:server.tests.test_main_memory",
+      "label": "server.tests.test_main_memory",
+      "metadata": {
+        "package": "server",
+        "path": "server/tests/test_main_memory.py"
+      },
+      "type": "module"
+    },
+    {
+      "id": "module:server.tests.test_main_routes",
+      "label": "server.tests.test_main_routes",
+      "metadata": {
+        "package": "server",
+        "path": "server/tests/test_main_routes.py"
+      },
+      "type": "module"
+    },
+    {
+      "id": "module:server.tests.test_main_websocket",
+      "label": "server.tests.test_main_websocket",
+      "metadata": {
+        "package": "server",
+        "path": "server/tests/test_main_websocket.py"
+      },
+      "type": "module"
+    }
+  ],
+  "repository": "https://github.com/homerquan/ApronAI"
+}

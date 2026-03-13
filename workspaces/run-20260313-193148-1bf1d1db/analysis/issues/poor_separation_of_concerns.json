@@ -1,0 +1,16 @@
+{
+  "evidence": [
+    "Mixed concern modules: none"
+  ],
+  "graphs_used": [
+    "architecture_graph",
+    "data_flow_graph"
+  ],
+  "id": "poor_separation_of_concerns",
+  "recommendations": [
+    "Separate domain logic from persistence and transport concerns."
+  ],
+  "severity": "low",
+  "summary": "Business logic, infrastructure code, UI behavior, and data access are mixed together.",
+  "title": "Poor Separation of Concerns"
+}

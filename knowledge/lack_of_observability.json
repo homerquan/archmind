@@ -1,0 +1,44 @@
+{
+  "id": "lack_of_observability",
+  "title": "Lack of Observability",
+  "summary": "The system was not designed with sufficient logging, metrics, tracing, and diagnosability.",
+  "inspection_goal": "Identify architectural areas where diagnosing behavior or failure would be difficult due to missing visibility points.",
+  "why_it_matters": [
+    "Slows incident response",
+    "Hides root causes",
+    "Makes system behavior harder to understand"
+  ],
+  "graph_focus": {
+    "node_types": ["service", "module", "api", "queue", "infra_component", "metric", "incident"],
+    "edge_types": ["calls", "depends_on", "emits_to", "fails_with", "evaluated_by"]
+  },
+  "primary_signals": [
+    "Critical paths with no explicit telemetry or metric nodes",
+    "Complex dependency chains with few diagnosable boundaries",
+    "Failure-prone regions with weak instrumentation hints",
+    "Operationally central components lacking visibility edges"
+  ],
+  "inspection_questions": [
+    "Which critical paths are hardest to observe?",
+    "Where would root-cause analysis likely stall?",
+    "Are central dependencies backed by metrics, logs, or traceable boundaries?",
+    "Do failure hotspots align with poor diagnosability?"
+  ],
+  "evidence_to_collect": [
+    "Presence or absence of observability-related nodes or integrations",
+    "Critical path complexity",
+    "Incident adjacency to weakly instrumented regions",
+    "Context from code patterns around logging, tracing, or metrics"
+  ],
+  "recommendation_patterns": [
+    "Add telemetry around critical paths and chokepoints",
+    "Instrument cross-boundary calls and data flows",
+    "Improve trace continuity across major dependencies",
+    "Make operationally central components diagnosable by default"
+  ],
+  "severity_guidance": {
+    "high": "Critical architectural paths are hard to diagnose and lack visibility anchors.",
+    "medium": "Observability gaps exist around important but not system-wide paths.",
+    "low": "Most important regions appear diagnosable with only minor blind spots."
+  }
+}

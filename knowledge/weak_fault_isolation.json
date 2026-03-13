@@ -1,0 +1,44 @@
+{
+  "id": "weak_fault_isolation",
+  "title": "Weak Fault Isolation",
+  "summary": "Failures in one component easily spread to others, causing cascading outages.",
+  "inspection_goal": "Inspect whether the dependency graph amplifies failures instead of containing them.",
+  "why_it_matters": [
+    "Causes cascading failures",
+    "Reduces resilience",
+    "Increases blast radius of incidents"
+  ],
+  "graph_focus": {
+    "node_types": ["service", "module", "api", "database", "queue", "infra_component"],
+    "edge_types": ["calls", "depends_on", "reads_from", "writes_to", "fails_with"]
+  },
+  "primary_signals": [
+    "Many critical paths converge on the same component",
+    "Long dependency chains without buffering boundaries",
+    "Bridge nodes whose failure would disconnect large regions",
+    "Tight synchronous cycles across critical components"
+  ],
+  "inspection_questions": [
+    "If this node fails, how much of the graph becomes degraded?",
+    "Which dependencies create large blast radii?",
+    "Where is there no structural buffering or containment?",
+    "Are core paths too synchronous and tightly chained?"
+  ],
+  "evidence_to_collect": [
+    "Bridge-node and articulation-point results",
+    "Critical dependency path counts",
+    "Cycle and SCC results on critical components",
+    "Dependency chain length summaries"
+  ],
+  "recommendation_patterns": [
+    "Introduce isolation boundaries and fallback behavior",
+    "Decouple critical paths with queues or retries where appropriate",
+    "Reduce central blast-radius nodes",
+    "Make dependencies optional or degradable where possible"
+  ],
+  "severity_guidance": {
+    "high": "A small set of failures could structurally impact large parts of the system.",
+    "medium": "Some dependency paths have poor containment but blast radius is still limited.",
+    "low": "Most failures are structurally containable."
+  }
+}

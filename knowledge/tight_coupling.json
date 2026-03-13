@@ -1,0 +1,47 @@
+{
+  "id": "tight_coupling",
+  "title": "Tight Coupling",
+  "summary": "Modules or services depend too heavily on each other, so a small change in one area can break many others.",
+  "inspection_goal": "Identify parts of the system where dependency density, reciprocal relationships, or central chokepoints make change difficult and risky.",
+  "why_it_matters": [
+    "Reduces flexibility",
+    "Slows development",
+    "Makes testing and refactoring harder",
+    "Increases regression risk"
+  ],
+  "graph_focus": {
+    "node_types": ["module", "package", "service", "external_dependency"],
+    "edge_types": ["imports", "depends_on", "calls", "uses"]
+  },
+  "primary_signals": [
+    "High fan-in and fan-out on the same node",
+    "Strongly connected components or direct cycles",
+    "Many bidirectional dependencies",
+    "Bridge nodes that connect otherwise separate parts of the graph",
+    "Dense dependency clusters with little boundary separation"
+  ],
+  "inspection_questions": [
+    "Which modules have both high incoming and outgoing dependency counts?",
+    "Where do cycles or reciprocal dependencies exist?",
+    "Which components act as dependency chokepoints?",
+    "Are there clusters that change together because of structural entanglement?"
+  ],
+  "evidence_to_collect": [
+    "Fan-in and fan-out metrics",
+    "Cycle detection results",
+    "Centrality scores",
+    "Bridge-node analysis",
+    "DSM rows or columns with high density"
+  ],
+  "recommendation_patterns": [
+    "Introduce narrower interfaces",
+    "Invert dependencies around stable abstractions",
+    "Split overloaded modules with mixed responsibilities",
+    "Break cycles using events, ports, or anti-corruption layers"
+  ],
+  "severity_guidance": {
+    "high": "Critical paths contain cycles or multiple hotspots that block safe change.",
+    "medium": "Dependency pressure is concentrated but still locally manageable.",
+    "low": "Coupling is visible but bounded and explainable."
+  }
+}

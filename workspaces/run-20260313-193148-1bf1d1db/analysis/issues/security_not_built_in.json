@@ -1,0 +1,16 @@
+{
+  "evidence": [
+    "Security capability coverage: 0.625"
+  ],
+  "graphs_used": [
+    "data_flow_graph",
+    "operational_risk_graph"
+  ],
+  "id": "security_not_built_in",
+  "recommendations": [
+    "Make trust boundaries and security-sensitive paths explicit."
+  ],
+  "severity": "low",
+  "summary": "Authentication, authorization, trust boundaries, secret handling, and data protection are treated as afterthoughts.",
+  "title": "Security Not Built Into the Architecture"
+}

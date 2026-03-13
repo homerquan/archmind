@@ -1,0 +1,44 @@
+{
+  "id": "scalability_bottlenecks",
+  "title": "Scalability Bottlenecks",
+  "summary": "The architecture contains centralized or blocking components that limit growth.",
+  "inspection_goal": "Find structurally central resources or synchronous chains likely to constrain throughput, latency, or growth.",
+  "why_it_matters": [
+    "Limits system growth",
+    "Creates contention and latency concentration",
+    "Increases cost under scale"
+  ],
+  "graph_focus": {
+    "node_types": ["service", "module", "database", "queue", "api", "infra_component"],
+    "edge_types": ["calls", "depends_on", "reads_from", "writes_to", "deploys_with"]
+  },
+  "primary_signals": [
+    "Very high betweenness or centrality around shared resources",
+    "Long synchronous chains",
+    "Single shared databases or services on many paths",
+    "High fan-in around blocking components"
+  ],
+  "inspection_questions": [
+    "Which nodes sit on many critical dependency paths?",
+    "Are there centralized stores or services that many components depend on?",
+    "Where could synchronous chains amplify latency?",
+    "What components are likely points of contention at scale?"
+  ],
+  "evidence_to_collect": [
+    "Centrality and bridge-node metrics",
+    "Path-length analysis",
+    "Shared dependency counts",
+    "Dependency concentration around databases or core services"
+  ],
+  "recommendation_patterns": [
+    "Decouple synchronous paths",
+    "Introduce queues, caching, or replication where appropriate",
+    "Reduce dependence on shared bottleneck components",
+    "Split or shard overloaded central services or stores"
+  ],
+  "severity_guidance": {
+    "high": "A few centralized components dominate critical paths and growth limits.",
+    "medium": "Bottlenecks are emerging but not yet dominant.",
+    "low": "Scalability risks are localized and structurally bounded."
+  }
+}

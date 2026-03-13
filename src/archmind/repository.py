@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -18,15 +19,90 @@ MANIFEST_FILES = {
 }
 
 
-def clone_repository(remote: str, branch: str, destination: Path) -> Path:
+def clone_repository(remote: str, branch: str, destination: Path) -> tuple[Path, str]:
     ensure_dir(destination.parent)
+    try:
+        _clone_branch(remote, branch, destination)
+        return destination, branch
+    except subprocess.CalledProcessError as error:
+        default_branch = resolve_default_branch(remote)
+        if default_branch and default_branch != branch:
+            _reset_destination(destination)
+            try:
+                _clone_branch(remote, default_branch, destination)
+                return destination, default_branch
+            except subprocess.CalledProcessError as retry_error:
+                raise RuntimeError(_clone_error_message(remote, branch, default_branch, retry_error)) from retry_error
+        raise RuntimeError(_clone_error_message(remote, branch, default_branch, error)) from error
+
+
+def _clone_branch(remote: str, branch: str, destination: Path) -> None:
     subprocess.run(
         ["git", "clone", "--depth", "1", "--branch", branch, remote, str(destination)],
         check=True,
         capture_output=True,
         text=True,
     )
-    return destination
+
+
+def _reset_destination(destination: Path) -> None:
+    if destination.exists():
+        shutil.rmtree(destination)
+
+
+def resolve_default_branch(remote: str) -> str | None:
+    result = subprocess.run(
+        ["git", "ls-remote", "--symref", remote, "HEAD"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return None
+    for line in result.stdout.splitlines():
+        if line.startswith("ref: ") and "\tHEAD" in line:
+            ref = line.split("\t", 1)[0].replace("ref: ", "", 1).strip()
+            return ref.removeprefix("refs/heads/")
+    return None
+
+
+def list_remote_branches(remote: str) -> list[str]:
+    result = subprocess.run(
+        ["git", "ls-remote", "--heads", remote],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return []
+    branches = []
+    for line in result.stdout.splitlines():
+        if "\t" not in line:
+            continue
+        ref = line.split("\t", 1)[1].strip()
+        if ref.startswith("refs/heads/"):
+            branches.append(ref.removeprefix("refs/heads/"))
+    return sorted(set(branches))
+
+
+def _clone_error_message(
+    remote: str,
+    requested_branch: str,
+    resolved_branch: str | None,
+    error: subprocess.CalledProcessError,
+) -> str:
+    available = list_remote_branches(remote)
+    stderr = (error.stderr or "").strip()
+    message = [f"Unable to clone repository branch '{requested_branch}' from '{remote}'."]
+    if resolved_branch and resolved_branch != requested_branch:
+        message.append(f"Remote default branch is '{resolved_branch}', but clone still failed.")
+    elif resolved_branch:
+        message.append(f"Remote default branch resolves to '{resolved_branch}'.")
+    if available:
+        message.append(f"Available branches: {', '.join(available)}.")
+    if stderr:
+        message.append(f"git stderr: {stderr}")
+    return " ".join(message)
 
 
 def repository_commit_sha(repo_path: Path) -> str:

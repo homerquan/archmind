@@ -1,0 +1,44 @@
+{
+  "id": "data_ownership_confusion",
+  "title": "Data Ownership and Source-of-Truth Confusion",
+  "summary": "Multiple services or modules read and write the same data without a clear owner.",
+  "inspection_goal": "Identify ambiguous data control paths and competing writers around the same entities or stores.",
+  "why_it_matters": [
+    "Causes inconsistent state",
+    "Makes debugging harder",
+    "Creates synchronization and ownership problems"
+  ],
+  "graph_focus": {
+    "node_types": ["service", "module", "database", "api", "queue"],
+    "edge_types": ["reads_from", "writes_to", "calls", "emits_to", "depends_on"]
+  },
+  "primary_signals": [
+    "Multiple independent writers to the same store or entity path",
+    "Read and write paths crossing many ownership boundaries",
+    "Several components acting as effective sources of truth",
+    "Synchronization or replication edges with unclear ownership"
+  ],
+  "inspection_questions": [
+    "Which data stores or entities have many writers?",
+    "Is there a clear owner for each important data domain?",
+    "Do readers and writers align with intended boundaries?",
+    "Where might duplicate or stale state emerge?"
+  ],
+  "evidence_to_collect": [
+    "Writer counts per store or entity node",
+    "Read/write path overlap",
+    "Ownership metadata near data nodes",
+    "Cross-boundary update flows"
+  ],
+  "recommendation_patterns": [
+    "Assign clear ownership to each data domain",
+    "Reduce multi-writer patterns",
+    "Use explicit synchronization or event contracts where duplication is intentional",
+    "Separate read models from write ownership where needed"
+  ],
+  "severity_guidance": {
+    "high": "Critical data domains have multiple uncontrolled writers and unclear ownership.",
+    "medium": "Ownership is mostly clear but with visible overlap in some domains.",
+    "low": "Data ownership is explicit with only minor ambiguity."
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "unclear_boundaries",
+  "title": "Unclear Service or Module Boundaries",
+  "summary": "The system does not clearly define what responsibility belongs to each component.",
+  "inspection_goal": "Find overlap, ambiguous ownership, and architectural regions where responsibilities appear smeared across multiple components.",
+  "why_it_matters": [
+    "Creates duplication and ownership confusion",
+    "Weakens modularity",
+    "Makes decomposition and scaling harder"
+  ],
+  "graph_focus": {
+    "node_types": ["module", "package", "service", "team", "api"],
+    "edge_types": ["contains", "imports", "depends_on", "owned_by", "calls"]
+  },
+  "primary_signals": [
+    "Frequent cross-boundary dependencies with no clear dominant owner",
+    "Clusters with mixed responsibilities or weak internal coherence",
+    "Modules that appear in many unrelated dependency neighborhoods",
+    "Similar domain concepts implemented in multiple places"
+  ],
+  "inspection_questions": [
+    "Do components have clear and singular responsibilities?",
+    "Which modules appear to overlap in domain scope?",
+    "Are ownership boundaries aligned with dependency boundaries?",
+    "Where does the graph suggest a smeared or accidental boundary?"
+  ],
+  "evidence_to_collect": [
+    "Cluster membership and cross-cluster edge counts",
+    "Ownership metadata where available",
+    "Context summaries from code or folder naming",
+    "Repeated dependency motifs across neighboring modules"
+  ],
+  "recommendation_patterns": [
+    "Clarify ownership and responsibility boundaries",
+    "Merge duplicated domain logic behind one clear owner",
+    "Split mixed-boundary components along domain lines",
+    "Document and enforce explicit interface boundaries"
+  ],
+  "severity_guidance": {
+    "high": "Core domains overlap heavily and ownership is ambiguous.",
+    "medium": "Boundary confusion exists in a few clusters or services.",
+    "low": "Most boundaries are clear, with only localized ambiguity."
+  }
+}

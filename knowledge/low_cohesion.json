@@ -1,0 +1,43 @@
+{
+  "id": "low_cohesion",
+  "title": "Low Cohesion",
+  "summary": "A module or service handles too many unrelated responsibilities.",
+  "inspection_goal": "Identify components whose internal responsibilities appear broad, inconsistent, or weakly related.",
+  "why_it_matters": [
+    "Makes modules harder to understand",
+    "Increases maintenance cost",
+    "Creates pressure for future coupling and boundary problems"
+  ],
+  "graph_focus": {
+    "node_types": ["module", "package", "service", "file", "class_or_symbol"],
+    "edge_types": ["contains", "imports", "calls", "uses"]
+  },
+  "primary_signals": [
+    "One module connects to many unrelated clusters",
+    "A node has broad outward dependency diversity",
+    "Large components mix domain, utility, and infrastructure links",
+    "Internal structure appears wide but weakly centered"
+  ],
+  "inspection_questions": [
+    "Does this component have one clear purpose?",
+    "Do its dependencies point to multiple unrelated concerns?",
+    "Would a reader infer several responsibilities from its connections?",
+    "Is this component acting as a catch-all bucket?"
+  ],
+  "evidence_to_collect": [
+    "Dependency diversity per module",
+    "Neighbor type distribution",
+    "Cluster overlap patterns",
+    "Folder and symbol context summaries"
+  ],
+  "recommendation_patterns": [
+    "Extract unrelated responsibilities into separate modules",
+    "Create smaller focused components",
+    "Move utility or infrastructure concerns out of domain-heavy modules"
+  ],
+  "severity_guidance": {
+    "high": "A component mixes several unrelated concerns and sits on many unrelated paths.",
+    "medium": "The component has a dominant responsibility but still carries obvious extras.",
+    "low": "The component is mostly cohesive with minor spillover."
+  }
+}

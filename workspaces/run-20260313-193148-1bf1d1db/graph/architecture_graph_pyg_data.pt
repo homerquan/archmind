@@ -1,0 +1,122 @@
+{
+  "backend": "fallback-json",
+  "edge_index": {
+    "package::contains::module": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "repository::contains::package": [
+      [
+        0
+      ],
+      [
+        0
+      ]
+    ]
+  },
+  "features": {
+    "module": [
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ]
+    ],
+    "package": [
+      [
+        0,
+        0,
+        1,
+        8
+      ]
+    ],
+    "repository": [
+      [
+        0,
+        0,
+        0,
+        1
+      ]
+    ]
+  },
+  "graph_id": "architecture_graph",
+  "node_types": {
+    "module": [
+      "module:server.gemini_live",
+      "module:server.main",
+      "module:server.progress_tracker",
+      "module:server.tests.test_gemini_live",
+      "module:server.tests.test_main_logging",
+      "module:server.tests.test_main_memory",
+      "module:server.tests.test_main_routes",
+      "module:server.tests.test_main_websocket"
+    ],
+    "package": [
+      "package:server"
+    ],
+    "repository": [
+      "repository:root"
+    ]
+  }
+}

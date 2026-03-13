@@ -22,6 +22,16 @@ The first useful analysis set should stay concrete and explainable:
 - centrality and bridge-node analysis to identify architectural choke points
 - LLM-based interpretation that turns graph evidence into architecture findings and recommendations
 
+## Graphs generated in v0
+ArchMind now builds several graph views from the same repository scan:
+- `dependency_graph`: module and external dependency relationships
+- `architecture_graph`: repository, package, and module boundary structure
+- `data_flow_graph`: inferred reads, writes, emits, and external data interactions
+- `interface_graph`: public interfaces, entrypoints, and their consumers
+- `operational_risk_graph`: inferred observability and security capability coverage
+
+The issue-inspection rules in [knowledge/graph_catalog.json](/Volumes/1TB/Personal_projects/ArchMind/knowledge/graph_catalog.json) map each architecture issue to the graph views most relevant to that inspection.
+
 ## Default technical direction
 - Python 3.11+ for the REPL, ingestion, graph processing, evaluation, and report generation
 - PyTorch plus PyTorch Geometric (PyG) for graph encoding, transforms, and GNNs
@@ -115,13 +125,28 @@ Default exported folder:
 ```text
 result/
   result.md
-  graph_visualization.pdf
-  metrics.json
-  findings.json
-  dsm.csv
+  dependency_graph.pdf
+  architecture_graph.pdf
+  data_flow_graph.pdf
+  interface_graph.pdf
+  operational_risk_graph.pdf
+  dependency_graph_metrics.json
+  architecture_graph_metrics.json
+  data_flow_graph_metrics.json
+  interface_graph_metrics.json
+  operational_risk_graph_metrics.json
+  dependency_graph_dsm.csv
+  issue_summary.json
+  issue_assessments.json
 ```
 
-Workspace artifacts remain under `workspaces/<run_id>/` and include the full analysis pipeline outputs, evaluation files, provenance, and the same graph PDF under `analysis/graph_visualization.pdf`.
+Workspace artifacts remain under `workspaces/<run_id>/` and include:
+- graph JSON files under `graph/`
+- PyG payloads per graph
+- PDFs per graph under `graph/`
+- per-graph metrics and findings under `analysis/`
+- per-issue inspection outputs under `analysis/issues/`
+- evaluation files and provenance metadata
 
 ## Reading order
 1. `AGENTS.md` for repo-local coding instructions

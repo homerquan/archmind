@@ -1,0 +1,34 @@
+{
+  "chatty_interfaces": [],
+  "edge_count": 12,
+  "entrypoint_count": 4,
+  "graph_id": "interface_graph",
+  "node_count": 20,
+  "top_interfaces": [
+    {
+      "consumers": 1,
+      "interface": "interface:server.tests.test_gemini_live",
+      "public_symbol_count": 20
+    },
+    {
+      "consumers": 1,
+      "interface": "interface:server.main",
+      "public_symbol_count": 17
+    },
+    {
+      "consumers": 1,
+      "interface": "interface:server.progress_tracker",
+      "public_symbol_count": 10
+    },
+    {
+      "consumers": 1,
+      "interface": "interface:server.tests.test_main_routes",
+      "public_symbol_count": 4
+    },
+    {
+      "consumers": 0,
+      "interface": "interface:server.gemini_live",
+      "public_symbol_count": 7
+    }
+  ]
+}

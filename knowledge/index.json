@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "scope": "architecture_inspection_instructions",
+  "graph_catalog": "graph_catalog.json",
+  "files": [
+    "tight_coupling.json",
+    "unclear_boundaries.json",
+    "low_cohesion.json",
+    "poor_separation_of_concerns.json",
+    "bad_interface_api_design.json",
+    "data_ownership_confusion.json",
+    "scalability_bottlenecks.json",
+    "weak_fault_isolation.json",
+    "lack_of_observability.json",
+    "security_not_built_in.json"
+  ]
+}
