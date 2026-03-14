@@ -8,7 +8,7 @@ The repository is documentation-driven at this stage. These markdown files defin
 
 ## Demo
 
-Watch the ArchMind demo video: [https://youtu.be/yHiM8-ig27o](https://youtu.be/yHiM8-ig27o)
+Watch the ArchMind demo video: [https://youtu.be/csiNiZG_ygQ](https://youtu.be/csiNiZG_ygQ)
 
 ## v0 product shape
 - Interface: CLI-only REPL
