@@ -1,0 +1,35 @@
+{
+  "edges": [],
+  "metadata": {
+    "graph_id": "operational_risk_graph",
+    "module_count": 0,
+    "title": "Operational Risk Graph"
+  },
+  "nodes": [
+    {
+      "id": "capability:observability",
+      "label": "observability",
+      "metadata": {},
+      "type": "metric"
+    },
+    {
+      "id": "capability:authentication",
+      "label": "authentication",
+      "metadata": {},
+      "type": "security_capability"
+    },
+    {
+      "id": "capability:secret_handling",
+      "label": "secret_handling",
+      "metadata": {},
+      "type": "security_capability"
+    },
+    {
+      "id": "capability:data_protection",
+      "label": "data_protection",
+      "metadata": {},
+      "type": "security_capability"
+    }
+  ],
+  "repository": "https://github.com/mongodb/mongo-java-driver.git"
+}

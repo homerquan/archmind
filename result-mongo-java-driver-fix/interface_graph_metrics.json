@@ -1,0 +1,40 @@
+{
+  "chatty_interfaces": [
+    "interface:com.mongodb.lang.Nullable",
+    "interface:org.bson.BsonDocument",
+    "interface:com.mongodb.assertions.Assertions",
+    "interface:org.bson.Document",
+    "interface:org.bson.BsonValue"
+  ],
+  "edge_count": 15612,
+  "entrypoint_count": 30,
+  "graph_id": "interface_graph",
+  "node_count": 4734,
+  "top_interfaces": [
+    {
+      "consumers": 528,
+      "interface": "interface:com.mongodb.lang.Nullable",
+      "public_symbol_count": 1
+    },
+    {
+      "consumers": 449,
+      "interface": "interface:org.bson.BsonDocument",
+      "public_symbol_count": 3
+    },
+    {
+      "consumers": 402,
+      "interface": "interface:com.mongodb.assertions.Assertions",
+      "public_symbol_count": 2
+    },
+    {
+      "consumers": 238,
+      "interface": "interface:org.bson.Document",
+      "public_symbol_count": 2
+    },
+    {
+      "consumers": 219,
+      "interface": "interface:org.bson.BsonValue",
+      "public_symbol_count": 2
+    }
+  ]
+}

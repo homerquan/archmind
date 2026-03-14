@@ -2,6 +2,8 @@
 
 ArchMind is a Python REPL-style CLI for understanding and analyzing software architecture from a GitHub repository. It opens with a polished terminal intro, prompts for any missing inputs, clones a selected branch, builds an architecture graph, applies PyG-based graph analysis, uses an LLM to interpret the findings in context, and produces a report on screen and in Markdown.
 
+Current repository language support is limited to Python and Java repositories.
+
 The repository is documentation-driven at this stage. These markdown files define the implementation contract for future code.
 
 ## Demo
@@ -11,7 +13,7 @@ Watch the ArchMind demo video: [https://youtu.be/yHiM8-ig27o](https://youtu.be/y
 ## v0 product shape
 - Interface: CLI-only REPL
 - Language: Python 3.11+
-- Input: GitHub repository URL
+- Input: GitHub repository URL for a Python or Java repository
 - Branch selection: optional, default `main`
 - Core output: architecture graph plus analysis findings
 - Report output: print to terminal and export a result folder named `result` by default
@@ -32,9 +34,16 @@ ArchMind now builds several graph views from the same repository scan:
 - `architecture_graph`: repository, package, and module boundary structure
 - `data_flow_graph`: inferred reads, writes, emits, and external data interactions
 - `interface_graph`: public interfaces, entrypoints, and their consumers
+- `function_graph`: function-level call relationships across modules and classes
 - `operational_risk_graph`: inferred observability and security capability coverage
 
 The issue-inspection rules in [knowledge/graph_catalog.json](/Volumes/1TB/Personal_projects/ArchMind/knowledge/graph_catalog.json) map each architecture issue to the graph views most relevant to that inspection.
+
+PDF graph exports use graph-aware layouts through `networkx` and `matplotlib`. Very large graphs are sampled down to the most structurally important nodes so the exported PDF remains readable.
+
+## Language support
+- Supported repository languages: Python and Java
+- Other repository languages are not supported yet and may produce sparse or empty graph artifacts
 
 ## Default technical direction
 - Python 3.11+ for the REPL, ingestion, graph processing, evaluation, and report generation
@@ -133,11 +142,13 @@ result/
   architecture_graph.pdf
   data_flow_graph.pdf
   interface_graph.pdf
+  function_graph.pdf
   operational_risk_graph.pdf
   dependency_graph_metrics.json
   architecture_graph_metrics.json
   data_flow_graph_metrics.json
   interface_graph_metrics.json
+  function_graph_metrics.json
   operational_risk_graph_metrics.json
   dependency_graph_dsm.csv
   issue_summary.json
@@ -166,7 +177,7 @@ Workspace artifacts remain under `workspaces/<run_id>/` and include:
 - Prefer explicit schemas over prompt-only conventions.
 - Record seeds, versions, hashes, and feature-schema changes whenever results should be reproducible.
 
-## Contents
+## Documents
 - `AGENTS.md` - repo instructions for coding agents
 - `SPEC.md` - system specification and domain contracts
 - `agent_roles.md` - execution roles and artifact ownership

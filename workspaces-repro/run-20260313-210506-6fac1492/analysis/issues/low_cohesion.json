@@ -1,0 +1,19 @@
+{
+  "evidence": [
+    "Highest dependency span: 0",
+    "Highest function fan-in: 0",
+    "Modules with broad span: none"
+  ],
+  "graphs_used": [
+    "architecture_graph",
+    "dependency_graph",
+    "function_graph"
+  ],
+  "id": "low_cohesion",
+  "recommendations": [
+    "Split overly broad modules into more focused units."
+  ],
+  "severity": "low",
+  "summary": "A module or service handles too many unrelated responsibilities.",
+  "title": "Low Cohesion"
+}

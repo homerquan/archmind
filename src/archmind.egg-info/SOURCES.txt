@@ -27,3 +27,4 @@ tests/test_cli.py
 tests/test_graphing.py
 tests/test_llm.py
 tests/test_pipeline.py
+tests/test_visualization.py

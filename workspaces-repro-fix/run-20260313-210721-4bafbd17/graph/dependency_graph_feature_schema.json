@@ -1,0 +1,15 @@
+{
+  "edge_types": [
+    "contains",
+    "depends_on",
+    "imports"
+  ],
+  "graph_id": "dependency_graph",
+  "node_features": [
+    "in_degree",
+    "out_degree",
+    "path_depth",
+    "public_symbol_count"
+  ],
+  "schema_version": 1
+}

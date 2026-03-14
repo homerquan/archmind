@@ -1,0 +1,11 @@
+{
+  "edge_types": [],
+  "graph_id": "function_graph",
+  "node_features": [
+    "in_degree",
+    "out_degree",
+    "path_depth",
+    "public_symbol_count"
+  ],
+  "schema_version": 1
+}

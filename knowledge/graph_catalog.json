@@ -48,6 +48,19 @@
       ]
     },
     {
+      "id": "function_graph",
+      "title": "Function Relationship Graph",
+      "summary": "Function-level call relationships used to expose fine-grained coupling, hotspots, and cross-module execution paths.",
+      "supports_issues": [
+        "tight_coupling",
+        "unclear_boundaries",
+        "low_cohesion",
+        "poor_separation_of_concerns",
+        "bad_interface_api_design",
+        "weak_fault_isolation"
+      ]
+    },
+    {
       "id": "operational_risk_graph",
       "title": "Operational Risk Graph",
       "summary": "Inferred observability and security capability coverage used for diagnosability and trust-boundary inspection.",

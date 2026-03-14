@@ -1,0 +1,10 @@
+{
+  "edges": [],
+  "metadata": {
+    "graph_id": "interface_graph",
+    "interface_count": 0,
+    "title": "Interface Graph"
+  },
+  "nodes": [],
+  "repository": "https://github.com/mongodb/mongo-java-driver.git"
+}

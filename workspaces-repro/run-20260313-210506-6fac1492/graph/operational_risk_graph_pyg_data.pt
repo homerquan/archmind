@@ -1,0 +1,45 @@
+{
+  "backend": "fallback-json",
+  "edge_index": {},
+  "features": {
+    "metric": [
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "security_capability": [
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "graph_id": "operational_risk_graph",
+  "node_types": {
+    "metric": [
+      "capability:observability"
+    ],
+    "security_capability": [
+      "capability:authentication",
+      "capability:secret_handling",
+      "capability:data_protection"
+    ]
+  }
+}

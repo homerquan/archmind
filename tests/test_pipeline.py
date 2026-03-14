@@ -25,8 +25,65 @@ def _init_repo_with_branch(remote_path: Path, branch: str) -> None:
     subprocess.run(["git", "-C", str(remote_path), "commit", "-m", "init"], check=True, capture_output=True)
 
 
-def test_pipeline_generates_report_and_artifacts(tmp_path: Path) -> None:
-    remote_repo = tmp_path / "remote"
+def _init_java_repo(remote_path: Path, branch: str = "main") -> None:
+    subprocess.run(["git", "init", "-b", branch, str(remote_path)], check=True, capture_output=True)
+    java_dir = remote_path / "src" / "main" / "java" / "com" / "example"
+    java_dir.mkdir(parents=True)
+    (java_dir / "App.java").write_text(
+        "package com.example;\n"
+        "import com.example.Util;\n"
+        "public class App {\n"
+        "    public void run() {\n"
+        "        Util.help();\n"
+        "        helper();\n"
+        "    }\n"
+        "    private void helper() {\n"
+        "        Util.help();\n"
+        "    }\n"
+        "}\n",
+        encoding="utf-8",
+    )
+    (java_dir / "Util.java").write_text(
+        "package com.example;\n"
+        "public class Util {\n"
+        "    public static void help() {\n"
+        "    }\n"
+        "}\n",
+        encoding="utf-8",
+    )
+    subprocess.run(["git", "-C", str(remote_path), "config", "user.email", "test@example.com"], check=True, capture_output=True)
+    subprocess.run(["git", "-C", str(remote_path), "config", "user.name", "Test User"], check=True, capture_output=True)
+    subprocess.run(["git", "-C", str(remote_path), "add", "."], check=True, capture_output=True)
+    subprocess.run(["git", "-C", str(remote_path), "commit", "-m", "init"], check=True, capture_output=True)
+
+
+def _assert_common_artifacts(workspace: Path, output_dir: Path) -> None:
+    assert (output_dir / "result.md").exists()
+    assert (output_dir / "dependency_graph.pdf").exists()
+    assert (output_dir / "architecture_graph.pdf").exists()
+    assert (output_dir / "data_flow_graph.pdf").exists()
+    assert (output_dir / "interface_graph.pdf").exists()
+    assert (output_dir / "function_graph.pdf").exists()
+    assert (output_dir / "operational_risk_graph.pdf").exists()
+    assert (output_dir / "dependency_graph_metrics.json").exists()
+    assert (output_dir / "function_graph_metrics.json").exists()
+    assert (output_dir / "issue_summary.json").exists()
+    assert (output_dir / "issue_assessments.json").exists()
+    assert (output_dir / "dependency_graph_dsm.csv").exists()
+    assert (workspace / "graph" / "dependency_graph.json").exists()
+    assert (workspace / "graph" / "architecture_graph.json").exists()
+    assert (workspace / "graph" / "function_graph.json").exists()
+    assert (workspace / "graph" / "dependency_graph.pdf").exists()
+    assert (workspace / "graph" / "dependency_graph.pdf").read_bytes().startswith(b"%PDF-1.4")
+    assert (workspace / "analysis" / "dependency_graph_metrics.json").exists()
+    assert (workspace / "analysis" / "function_graph_metrics.json").exists()
+    assert (workspace / "analysis" / "issue_assessments.json").exists()
+    assert (workspace / "deliverables" / "result.md").exists()
+    assert (workspace / "eval" / "report.json").exists()
+
+
+def test_pipeline_generates_report_and_artifacts_for_python_repo(tmp_path: Path) -> None:
+    remote_repo = tmp_path / "remote-python"
     remote_repo.mkdir()
     _init_repo(remote_repo)
 
@@ -43,24 +100,30 @@ def test_pipeline_generates_report_and_artifacts(tmp_path: Path) -> None:
     result = run(request, ui, workspaces_root=tmp_path / "workspaces")
 
     workspace = Path(result["workspace"])
-    assert (output_dir / "result.md").exists()
-    assert (output_dir / "dependency_graph.pdf").exists()
-    assert (output_dir / "architecture_graph.pdf").exists()
-    assert (output_dir / "data_flow_graph.pdf").exists()
-    assert (output_dir / "interface_graph.pdf").exists()
-    assert (output_dir / "operational_risk_graph.pdf").exists()
-    assert (output_dir / "dependency_graph_metrics.json").exists()
-    assert (output_dir / "issue_summary.json").exists()
-    assert (output_dir / "issue_assessments.json").exists()
-    assert (output_dir / "dependency_graph_dsm.csv").exists()
-    assert (workspace / "graph" / "dependency_graph.json").exists()
-    assert (workspace / "graph" / "architecture_graph.json").exists()
-    assert (workspace / "graph" / "dependency_graph.pdf").exists()
-    assert (workspace / "graph" / "dependency_graph.pdf").read_bytes().startswith(b"%PDF-1.4")
-    assert (workspace / "analysis" / "dependency_graph_metrics.json").exists()
-    assert (workspace / "analysis" / "issue_assessments.json").exists()
-    assert (workspace / "deliverables" / "result.md").exists()
-    assert (workspace / "eval" / "report.json").exists()
+    _assert_common_artifacts(workspace, output_dir)
+
+
+def test_pipeline_generates_report_and_artifacts_for_java_repo(tmp_path: Path) -> None:
+    remote_repo = tmp_path / "remote-java"
+    remote_repo.mkdir()
+    _init_java_repo(remote_repo)
+
+    output_dir = tmp_path / "result-java"
+    request = ArchitectureRequest(
+        github_url=str(remote_repo),
+        branch="main",
+        output_dir=str(output_dir),
+        llm_provider="openai",
+    )
+    prompt_io = PromptIO(input_fn=lambda _: "", getpass_fn=lambda _: "")
+    ui = UI(prompt_io=prompt_io)
+
+    result = run(request, ui, workspaces_root=tmp_path / "workspaces")
+
+    workspace = Path(result["workspace"])
+    _assert_common_artifacts(workspace, output_dir)
+    function_graph = (workspace / "graph" / "function_graph.json").read_text(encoding="utf-8")
+    assert "com.example.App.run" in function_graph
 
 
 def test_pipeline_falls_back_to_remote_default_branch(tmp_path: Path) -> None:

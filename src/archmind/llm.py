@@ -8,7 +8,7 @@ from archmind.models import LLMConfig
 PROVIDER_MODELS = {
     "openai": "openai/gpt-4o-mini",
     "anthropic": "anthropic/claude-3-5-haiku-latest",
-    "gemini": "gemini/gemini-1.5-flash",
+    "gemini": "gemini/gemini-3-flash-preview",
 }
 
 PROVIDER_ENV_VARS = {
@@ -42,19 +42,39 @@ def llm_completion(system_prompt: str, user_prompt: str, llm_config: LLMConfig) 
     if not llm_config.api_key:
         return None
     try:  # pragma: no cover - optional dependency and network path
+        import litellm
         from litellm import completion
     except Exception:
         return None
+    _enable_litellm_debug(litellm)
     try:  # pragma: no cover - optional dependency and network path
         response = completion(
-            model=llm_config.model,
+            model=normalized_model_name(llm_config.provider, llm_config.model),
+            custom_llm_provider=llm_config.provider,
             api_key=llm_config.api_key,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
-            temperature=0.2,
+            temperature=0.7,
         )
         return response["choices"][0]["message"]["content"]
     except Exception:
         return None
+
+
+def _enable_litellm_debug(litellm_module) -> None:
+    if getattr(litellm_module, "_archmind_debug_enabled", False):
+        return
+    litellm_module._turn_on_debug()
+    litellm_module._archmind_debug_enabled = True
+
+
+def normalized_model_name(provider: str, model: str) -> str:
+    model_name = model.strip()
+    provider_prefix = f"{provider}/"
+    if model_name.startswith(provider_prefix):
+        return model_name
+    if "/" in model_name:
+        return model_name
+    return f"{provider_prefix}{model_name}"

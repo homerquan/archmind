@@ -20,6 +20,8 @@ def analyze_graph_bundle(graphs: dict[str, ArchitectureGraph], analysis_dir: Pat
             metrics, findings = analyze_data_flow_graph(graph)
         elif graph_id == "interface_graph":
             metrics, findings = analyze_interface_graph(graph)
+        elif graph_id == "function_graph":
+            metrics, findings = analyze_function_graph(graph)
         elif graph_id == "operational_risk_graph":
             metrics, findings = analyze_operational_risk_graph(graph)
         else:
@@ -289,6 +291,97 @@ def analyze_interface_graph(graph: ArchitectureGraph) -> tuple[dict[str, Any], l
         "entrypoint_count": len(entrypoints),
         "top_interfaces": top_interfaces,
         "chatty_interfaces": chatty_interfaces,
+    }
+    return metrics, findings
+
+
+def analyze_function_graph(graph: ArchitectureGraph) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    adjacency = _adjacency(graph, include_edge_types={"calls"}, source_type="function", target_type="function")
+    reverse = _reverse_graph(adjacency)
+    indegree, outdegree = _degrees(adjacency)
+    sccs = strongly_connected_components(adjacency)
+    cycles = [component for component in sccs if len(component) > 1]
+    articulations = articulation_points(adjacency)
+    node_lookup = {node.id: node for node in graph.nodes}
+
+    cross_module_call_count = 0
+    for source, targets in adjacency.items():
+        source_module = node_lookup.get(source).metadata.get("module") if node_lookup.get(source) else None
+        for target in targets:
+            target_module = node_lookup.get(target).metadata.get("module") if node_lookup.get(target) else None
+            if source_module and target_module and source_module != target_module:
+                cross_module_call_count += 1
+
+    top_callers = [
+        {
+            "function": function_id,
+            "module": node_lookup.get(function_id).metadata.get("module", ""),
+            "fan_out": outdegree[function_id],
+            "fan_in": indegree[function_id],
+        }
+        for function_id in sorted(
+            adjacency,
+            key=lambda function_id: (outdegree[function_id], indegree[function_id], function_id),
+            reverse=True,
+        )[:5]
+    ]
+    top_shared_functions = [
+        {
+            "function": function_id,
+            "module": node_lookup.get(function_id).metadata.get("module", ""),
+            "fan_in": indegree[function_id],
+            "fan_out": outdegree[function_id],
+        }
+        for function_id in sorted(
+            adjacency,
+            key=lambda function_id: (indegree[function_id], outdegree[function_id], function_id),
+            reverse=True,
+        )[:5]
+    ]
+    entrypoint_functions = sorted(
+        node.id
+        for node in graph.nodes
+        if node.type == "function" and bool(node.metadata.get("entrypoint"))
+    )
+
+    findings: list[dict[str, Any]] = []
+    for component in cycles:
+        findings.append(
+            {
+                "kind": "function_cycle",
+                "severity": "high" if len(component) > 2 else "medium",
+                "target_entities": component,
+                "summary": f"Function call cycle detected across {', '.join(component)}.",
+                "evidence": {"component_size": len(component)},
+            }
+        )
+    for item in top_shared_functions[:3]:
+        if item["fan_in"] == 0:
+            continue
+        findings.append(
+            {
+                "kind": "function_hotspot",
+                "severity": "high" if item["fan_in"] >= 3 else "medium",
+                "target_entities": [item["function"]],
+                "summary": f"{item['function']} is called by multiple internal functions.",
+                "evidence": item,
+            }
+        )
+
+    metrics = {
+        "graph_id": "function_graph",
+        "node_count": len(graph.nodes),
+        "edge_count": len(graph.edges),
+        "function_count": len(adjacency),
+        "call_edge_count": sum(len(targets) for targets in adjacency.values()),
+        "cycle_count": len(cycles),
+        "strongly_connected_components": sccs,
+        "articulation_points": articulations,
+        "cross_module_call_count": cross_module_call_count,
+        "top_callers": top_callers,
+        "top_shared_functions": top_shared_functions,
+        "entrypoint_function_count": len(entrypoint_functions),
+        "entrypoint_functions": entrypoint_functions,
     }
     return metrics, findings
 

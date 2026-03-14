@@ -1,0 +1,32 @@
+[
+  {
+    "evidence": {
+      "coverage": 0.062
+    },
+    "kind": "observability_gap",
+    "severity": "high",
+    "summary": "Observability coverage appears low across analyzed modules.",
+    "target_entities": [
+      "module:com.mongodb.AbstractConnectionStringTest",
+      "module:com.mongodb.AcknowledgedBulkWriteResult",
+      "module:com.mongodb.AggregationOptions",
+      "module:com.mongodb.AuthConnectionStringTest",
+      "module:com.mongodb.AuthenticationMechanism"
+    ]
+  },
+  {
+    "evidence": {
+      "coverage": 0.336
+    },
+    "kind": "security_gap",
+    "severity": "medium",
+    "summary": "Security-related coverage appears low across analyzed modules.",
+    "target_entities": [
+      "module:com.mongodb.AggregationOptions",
+      "module:com.mongodb.BSONTimestampCodec",
+      "module:com.mongodb.BasicDBList",
+      "module:com.mongodb.BasicDBObjectFactory",
+      "module:com.mongodb.Block"
+    ]
+  }
+]

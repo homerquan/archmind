@@ -68,44 +68,62 @@ def _heuristic_assessment(issue_id: str, issue_context: dict[str, Any]) -> tuple
     arch = issue_context.get("architecture_graph", {}).get("metrics", {})
     data = issue_context.get("data_flow_graph", {}).get("metrics", {})
     interface = issue_context.get("interface_graph", {}).get("metrics", {})
+    function = issue_context.get("function_graph", {}).get("metrics", {})
     operational = issue_context.get("operational_risk_graph", {}).get("metrics", {})
 
     if issue_id == "tight_coupling":
         cycle_count = dep.get("cycle_count", 0)
+        function_cycles = function.get("cycle_count", 0)
         hotspots = dep.get("top_coupled_modules", [])
-        severity = "high" if cycle_count > 0 else "medium" if hotspots else "low"
+        cross_module_calls = function.get("cross_module_call_count", 0)
+        severity = "high" if cycle_count > 0 or function_cycles > 0 else "medium" if hotspots or cross_module_calls else "low"
         evidence = [
             f"Dependency cycles: {cycle_count}",
+            f"Function call cycles: {function_cycles}",
+            f"Cross-module function calls: {cross_module_calls}",
             f"Top coupled modules: {', '.join(item['module'] for item in hotspots[:3]) or 'none'}",
         ]
         recommendations = ["Break cycles and reduce dependence on the hottest modules."]
     elif issue_id == "unclear_boundaries":
         cross = arch.get("cross_package_dependency_count", 0)
+        cross_module_calls = function.get("cross_module_call_count", 0)
         hotspots = arch.get("boundary_hotspots", [])
-        severity = "high" if cross >= 5 else "medium" if cross >= 2 else "low"
+        severity = "high" if cross >= 5 or cross_module_calls >= 10 else "medium" if cross >= 2 or cross_module_calls >= 4 else "low"
         evidence = [
             f"Cross-package dependencies: {cross}",
+            f"Cross-module function calls: {cross_module_calls}",
             f"Boundary hotspots: {', '.join(item['package'] for item in hotspots[:3]) or 'none'}",
         ]
         recommendations = ["Clarify package ownership and narrow cross-boundary dependencies."]
     elif issue_id == "low_cohesion":
         diversity = dep.get("dependency_diversity", [])
         score = diversity[0]["dependency_span"] if diversity else 0
-        severity = "high" if score >= 5 else "medium" if score >= 3 else "low"
+        shared = function.get("top_shared_functions", [])
+        shared_fan_in = shared[0]["fan_in"] if shared else 0
+        severity = "high" if score >= 5 or shared_fan_in >= 4 else "medium" if score >= 3 or shared_fan_in >= 2 else "low"
         evidence = [
             f"Highest dependency span: {score}",
+            f"Highest function fan-in: {shared_fan_in}",
             f"Modules with broad span: {', '.join(item['module'] for item in diversity[:3]) or 'none'}",
         ]
         recommendations = ["Split overly broad modules into more focused units."]
     elif issue_id == "poor_separation_of_concerns":
         mixed = data.get("mixed_concern_modules", [])
-        severity = "high" if len(mixed) >= 3 else "medium" if mixed else "low"
-        evidence = [f"Mixed concern modules: {', '.join(mixed[:5]) or 'none'}"]
+        cross_module_calls = function.get("cross_module_call_count", 0)
+        severity = "high" if len(mixed) >= 3 or cross_module_calls >= 10 else "medium" if mixed or cross_module_calls >= 4 else "low"
+        evidence = [
+            f"Mixed concern modules: {', '.join(mixed[:5]) or 'none'}",
+            f"Cross-module function calls: {cross_module_calls}",
+        ]
         recommendations = ["Separate domain logic from persistence and transport concerns."]
     elif issue_id == "bad_interface_api_design":
         chatty = interface.get("chatty_interfaces", [])
-        severity = "high" if len(chatty) >= 2 else "medium" if chatty else "low"
-        evidence = [f"Chatty or highly consumed interfaces: {', '.join(chatty[:5]) or 'none'}"]
+        shared = function.get("top_shared_functions", [])
+        severity = "high" if len(chatty) >= 2 or any(item["fan_in"] >= 4 for item in shared[:3]) else "medium" if chatty or shared else "low"
+        evidence = [
+            f"Chatty or highly consumed interfaces: {', '.join(chatty[:5]) or 'none'}",
+            f"Top shared functions: {', '.join(item['function'] for item in shared[:3]) or 'none'}",
+        ]
         recommendations = ["Simplify and stabilize heavily consumed interface surfaces."]
     elif issue_id == "data_ownership_confusion":
         multi = data.get("multi_writer_targets", [])
@@ -123,10 +141,12 @@ def _heuristic_assessment(issue_id: str, issue_context: dict[str, Any]) -> tuple
         recommendations = ["Reduce central chokepoints and shorten synchronous dependency paths."]
     elif issue_id == "weak_fault_isolation":
         articulations = dep.get("articulation_points", [])
+        function_articulations = function.get("articulation_points", [])
         cycles = dep.get("cycle_count", 0)
-        severity = "high" if articulations or cycles else "low"
+        severity = "high" if articulations or function_articulations or cycles else "low"
         evidence = [
             f"Articulation points: {', '.join(articulations[:5]) or 'none'}",
+            f"Function bridge points: {', '.join(function_articulations[:5]) or 'none'}",
             f"Cycle count: {cycles}",
         ]
         recommendations = ["Introduce isolation boundaries around bridge nodes and cycle-heavy paths."]

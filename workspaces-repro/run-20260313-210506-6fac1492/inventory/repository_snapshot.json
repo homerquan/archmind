@@ -1,0 +1,11 @@
+{
+  "branch": "main",
+  "commit_sha": "9ae84c9161eb5ac1a04d5e7c7fc9ce7a3fbffa3f",
+  "fetched_at": "2026-03-14T01:05:07+00:00",
+  "github_url": "https://github.com/mongodb/mongo-java-driver.git",
+  "language_hints": [
+    "unknown"
+  ],
+  "manifests": [],
+  "root_path": "workspaces-repro/run-20260313-210506-6fac1492/source/repo"
+}

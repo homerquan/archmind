@@ -1,0 +1,21 @@
+{
+  "edges": [],
+  "metadata": {
+    "cross_package_dependency_count": 0,
+    "graph_id": "architecture_graph",
+    "package_count": 0,
+    "title": "Architecture Graph"
+  },
+  "nodes": [
+    {
+      "id": "repository:root",
+      "label": "repo",
+      "metadata": {
+        "branch": "main",
+        "commit_sha": "9ae84c9161eb5ac1a04d5e7c7fc9ce7a3fbffa3f"
+      },
+      "type": "repository"
+    }
+  ],
+  "repository": "https://github.com/mongodb/mongo-java-driver.git"
+}

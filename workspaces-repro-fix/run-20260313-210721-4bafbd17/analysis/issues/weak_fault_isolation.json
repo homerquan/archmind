@@ -1,0 +1,21 @@
+{
+  "evidence": [
+    "Articulation points: module:com.mongodb.AwsCredential, module:com.mongodb.ClusterFixture, module:com.mongodb.ConnectionString, module:com.mongodb.DB, module:com.mongodb.DBObjectCodec",
+    "Function bridge points: function:com.mongodb.AbstractConnectionStringTest.testValidAuth, function:com.mongodb.AuthConnectionStringTest.assertMechanismProperties, function:com.mongodb.AuthConnectionStringTest.getMongoCredential, function:com.mongodb.AuthenticationMechanism.getMechanismName, function:com.mongodb.AutoEncryptionSettings.builder",
+    "Cycle count: 27"
+  ],
+  "graphs_used": [
+    "data_flow_graph",
+    "dependency_graph",
+    "function_graph",
+    "interface_graph",
+    "operational_risk_graph"
+  ],
+  "id": "weak_fault_isolation",
+  "recommendations": [
+    "Introduce isolation boundaries around bridge nodes and cycle-heavy paths."
+  ],
+  "severity": "high",
+  "summary": "Failures in one component easily spread to others, causing cascading outages.",
+  "title": "Weak Fault Isolation"
+}

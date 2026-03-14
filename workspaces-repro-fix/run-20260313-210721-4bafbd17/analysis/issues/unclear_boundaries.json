@@ -1,0 +1,20 @@
+{
+  "evidence": [
+    "Cross-package dependencies: 1137",
+    "Cross-module function calls: 1571",
+    "Boundary hotspots: package:com.mongodb, package:org.bson, package:com.mongodb.lang"
+  ],
+  "graphs_used": [
+    "architecture_graph",
+    "dependency_graph",
+    "function_graph",
+    "interface_graph"
+  ],
+  "id": "unclear_boundaries",
+  "recommendations": [
+    "Clarify package ownership and narrow cross-boundary dependencies."
+  ],
+  "severity": "high",
+  "summary": "The system does not clearly define what responsibility belongs to each component.",
+  "title": "Unclear Service or Module Boundaries"
+}

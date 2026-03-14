@@ -1,0 +1,15 @@
+{
+  "evidence": [
+    "Multi-writer targets: none"
+  ],
+  "graphs_used": [
+    "data_flow_graph"
+  ],
+  "id": "data_ownership_confusion",
+  "recommendations": [
+    "Assign a clear owner for each shared data target."
+  ],
+  "severity": "low",
+  "summary": "Multiple services or modules read and write the same data without a clear owner.",
+  "title": "Data Ownership and Source-of-Truth Confusion"
+}

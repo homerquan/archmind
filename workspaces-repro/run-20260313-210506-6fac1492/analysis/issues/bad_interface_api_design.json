@@ -1,0 +1,17 @@
+{
+  "evidence": [
+    "Chatty or highly consumed interfaces: none",
+    "Top shared functions: none"
+  ],
+  "graphs_used": [
+    "function_graph",
+    "interface_graph"
+  ],
+  "id": "bad_interface_api_design",
+  "recommendations": [
+    "Simplify and stabilize heavily consumed interface surfaces."
+  ],
+  "severity": "low",
+  "summary": "Interfaces are inconsistent, overly complex, too chatty, or leak internal implementation details.",
+  "title": "Bad Interface / API Design"
+}

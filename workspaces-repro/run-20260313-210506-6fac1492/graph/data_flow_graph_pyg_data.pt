@@ -1,0 +1,7 @@
+{
+  "backend": "fallback-json",
+  "edge_index": {},
+  "features": {},
+  "graph_id": "data_flow_graph",
+  "node_types": {}
+}

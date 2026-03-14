@@ -1,6 +1,6 @@
 rich>=13.7.0
 litellm>=1.51.0
-
-[graph]
 torch>=2.4.0
 torch-geometric>=2.6.0
+networkx>=3.3
+matplotlib>=3.9.0

@@ -125,6 +125,8 @@ def detect_language_hints(repo_path: Path) -> list[str]:
         hints.append("python")
     if ".js" in suffixes or ".ts" in suffixes:
         hints.append("javascript")
+    if ".java" in suffixes:
+        hints.append("java")
     if ".go" in suffixes:
         hints.append("go")
     if ".rs" in suffixes:

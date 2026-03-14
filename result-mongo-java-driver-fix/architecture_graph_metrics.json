@@ -1,0 +1,144 @@
+{
+  "boundary_hotspots": [
+    {
+      "incoming": 70,
+      "outgoing": 44,
+      "package": "package:com.mongodb"
+    },
+    {
+      "incoming": 87,
+      "outgoing": 12,
+      "package": "package:org.bson"
+    },
+    {
+      "incoming": 79,
+      "outgoing": 0,
+      "package": "package:com.mongodb.lang"
+    },
+    {
+      "incoming": 29,
+      "outgoing": 46,
+      "package": "package:com.mongodb.client"
+    },
+    {
+      "incoming": 23,
+      "outgoing": 49,
+      "package": "package:com.mongodb.internal.connection"
+    }
+  ],
+  "cross_package_dependency_count": 1137,
+  "edge_count": 3624,
+  "graph_id": "architecture_graph",
+  "node_count": 2488,
+  "package_count": 135,
+  "package_cycles": [
+    [
+      "package:com.mongodb",
+      "package:com.mongodb.async",
+      "package:com.mongodb.bulk",
+      "package:com.mongodb.client",
+      "package:com.mongodb.client.auth",
+      "package:com.mongodb.client.gridfs",
+      "package:com.mongodb.client.gridfs.codecs",
+      "package:com.mongodb.client.gridfs.model",
+      "package:com.mongodb.client.internal",
+      "package:com.mongodb.client.model",
+      "package:com.mongodb.client.model.bulk",
+      "package:com.mongodb.client.model.changestream",
+      "package:com.mongodb.client.model.densify",
+      "package:com.mongodb.client.model.fill",
+      "package:com.mongodb.client.model.mql",
+      "package:com.mongodb.client.model.search",
+      "package:com.mongodb.client.model.vault",
+      "package:com.mongodb.client.observability",
+      "package:com.mongodb.client.syncadapter",
+      "package:com.mongodb.client.test",
+      "package:com.mongodb.client.unified",
+      "package:com.mongodb.client.vault",
+      "package:com.mongodb.connection",
+      "package:com.mongodb.event",
+      "package:com.mongodb.fixture",
+      "package:com.mongodb.internal",
+      "package:com.mongodb.internal.async",
+      "package:com.mongodb.internal.async.function",
+      "package:com.mongodb.internal.authentication",
+      "package:com.mongodb.internal.binding",
+      "package:com.mongodb.internal.bulk",
+      "package:com.mongodb.internal.capi",
+      "package:com.mongodb.internal.client.model",
+      "package:com.mongodb.internal.client.model.bulk",
+      "package:com.mongodb.internal.client.model.search",
+      "package:com.mongodb.internal.client.vault",
+      "package:com.mongodb.internal.connection",
+      "package:com.mongodb.internal.connection.netty",
+      "package:com.mongodb.internal.connection.tlschannel",
+      "package:com.mongodb.internal.connection.tlschannel.async",
+      "package:com.mongodb.internal.connection.tlschannel.impl",
+      "package:com.mongodb.internal.connection.tlschannel.util",
+      "package:com.mongodb.internal.dns",
+      "package:com.mongodb.internal.event",
+      "package:com.mongodb.internal.function",
+      "package:com.mongodb.internal.graalvm.substitution",
+      "package:com.mongodb.internal.logging",
+      "package:com.mongodb.internal.mockito",
+      "package:com.mongodb.internal.observability.micrometer",
+      "package:com.mongodb.internal.operation",
+      "package:com.mongodb.internal.operation.retry",
+      "package:com.mongodb.internal.selector",
+      "package:com.mongodb.internal.session",
+      "package:com.mongodb.internal.thread",
+      "package:com.mongodb.internal.time",
+      "package:com.mongodb.logging",
+      "package:com.mongodb.observability",
+      "package:com.mongodb.observability.micrometer",
+      "package:com.mongodb.reactivestreams.client",
+      "package:com.mongodb.reactivestreams.client.gridfs",
+      "package:com.mongodb.reactivestreams.client.internal",
+      "package:com.mongodb.reactivestreams.client.internal.crypt",
+      "package:com.mongodb.reactivestreams.client.internal.gridfs",
+      "package:com.mongodb.reactivestreams.client.internal.vault",
+      "package:com.mongodb.reactivestreams.client.syncadapter",
+      "package:com.mongodb.reactivestreams.client.vault",
+      "package:com.mongodb.selector",
+      "package:com.mongodb.session",
+      "package:com.mongodb.spi.dns",
+      "package:org.bson.codecs.record",
+      "package:reactivestreams.helpers"
+    ],
+    [
+      "package:org.bson",
+      "package:org.bson.codecs",
+      "package:org.bson.codecs.configuration",
+      "package:org.bson.codecs.jsr310",
+      "package:org.bson.conversions",
+      "package:org.bson.internal",
+      "package:org.bson.internal.vector",
+      "package:org.bson.io",
+      "package:org.bson.json",
+      "package:org.bson.types",
+      "package:util"
+    ],
+    [
+      "package:org.bson.codecs.pojo",
+      "package:org.bson.codecs.pojo.annotations",
+      "package:org.bson.codecs.pojo.entities",
+      "package:org.bson.codecs.pojo.entities.conventions"
+    ],
+    [
+      "package:com.mongodb.benchmark.benchmarks",
+      "package:com.mongodb.benchmark.benchmarks.bulk"
+    ],
+    [
+      "package:com.mongodb.client.model.geojson",
+      "package:com.mongodb.client.model.geojson.codecs"
+    ],
+    [
+      "package:com.mongodb.crypt.capi",
+      "package:com.mongodb.internal.crypt.capi"
+    ],
+    [
+      "package:com.mongodb.test",
+      "package:com.mongodb.test.extension"
+    ]
+  ]
+}

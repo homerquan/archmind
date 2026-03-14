@@ -1,0 +1,11 @@
+{
+  "edge_count": 0,
+  "emitter_counts": {},
+  "graph_id": "data_flow_graph",
+  "mixed_concern_modules": [],
+  "multi_writer_targets": [],
+  "node_count": 0,
+  "reader_counts": {},
+  "shared_targets": [],
+  "writer_counts": {}
+}

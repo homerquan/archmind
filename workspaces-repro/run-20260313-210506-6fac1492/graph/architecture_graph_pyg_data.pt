@@ -1,0 +1,20 @@
+{
+  "backend": "fallback-json",
+  "edge_index": {},
+  "features": {
+    "repository": [
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "graph_id": "architecture_graph",
+  "node_types": {
+    "repository": [
+      "repository:root"
+    ]
+  }
+}

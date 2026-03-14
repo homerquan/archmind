@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from archmind.llm import collect_llm_config, llm_completion
+import sys
+from types import SimpleNamespace
+
+from archmind.llm import collect_llm_config, llm_completion, normalized_model_name
 from archmind.models import LLMConfig
 
 
@@ -34,3 +37,50 @@ def test_collect_llm_config_uses_provider_hint_without_reprompting() -> None:
     assert config.api_key_source == "none"
     assert ui.choose_calls == 0
     assert ui.prompt_calls == [("Anthropic API key (leave blank for local fallback)", True)]
+
+
+def test_llm_completion_turns_on_litellm_debug(monkeypatch) -> None:
+    debug_calls: list[str] = []
+    captured_kwargs: dict[str, object] = {}
+
+    class FakeLiteLLM:
+        def _turn_on_debug(self) -> None:
+            debug_calls.append("debug")
+
+    fake_module = FakeLiteLLM()
+
+    def fake_completion(**kwargs):
+        captured_kwargs.update(kwargs)
+        return {"choices": [{"message": {"content": "ok"}}]}
+
+    monkeypatch.setitem(sys.modules, "litellm", SimpleNamespace(completion=fake_completion, _turn_on_debug=fake_module._turn_on_debug))
+
+    config = LLMConfig(
+        provider="openai",
+        model="openai/gpt-4o-mini",
+        api_key="test-key",
+        api_key_source="prompt",
+    )
+
+    assert llm_completion("system", "user", config) == "ok"
+    assert debug_calls == ["debug"]
+    assert captured_kwargs["model"] == "openai/gpt-4o-mini"
+    assert captured_kwargs["custom_llm_provider"] == "openai"
+    assert captured_kwargs["temperature"] == 0.7
+
+
+def test_normalized_model_name_adds_provider_prefix_when_missing() -> None:
+    assert normalized_model_name("gemini", "gemini-1.5-flash") == "gemini/gemini-1.5-flash"
+    assert normalized_model_name("gemini", "gemini/gemini-1.5-flash") == "gemini/gemini-1.5-flash"
+    assert normalized_model_name("openai", "openai/gpt-4o-mini") == "openai/gpt-4o-mini"
+
+
+def test_collect_llm_config_uses_gemini_3_flash_preview_by_default() -> None:
+    class FakeUI:
+        def prompt(self, label: str, default: str | None = None, secret: bool = False) -> str:
+            return ""
+
+    config = collect_llm_config(FakeUI(), "gemini")
+
+    assert config.provider == "gemini"
+    assert config.model == "gemini/gemini-3-flash-preview"
