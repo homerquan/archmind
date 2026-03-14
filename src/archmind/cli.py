@@ -16,6 +16,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--branch", help="Target branch. Defaults to main.")
     parser.add_argument("--output", help="Output folder. Defaults to ./result.")
     parser.add_argument("--llm-provider", choices=["openai", "anthropic", "gemini"], help="LLM provider to use.")
+    parser.add_argument("--debug", action="store_true", help="Enable debug logging, including LiteLLM debug output.")
     parser.add_argument("--version", action="version", version=f"archmind {__version__}")
     return parser
 
@@ -40,6 +41,7 @@ def _collect_request(args, ui: UI) -> ArchitectureRequest:
         branch=branch,
         output_dir=output_dir,
         llm_provider=provider,
+        debug=args.debug,
     )
 
 

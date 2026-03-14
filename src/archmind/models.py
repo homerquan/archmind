@@ -10,6 +10,7 @@ class ArchitectureRequest:
     branch: str = "main"
     output_dir: str = "result"
     llm_provider: str = "openai"
+    debug: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -21,12 +22,14 @@ class LLMConfig:
     model: str
     api_key: str | None = field(default=None, repr=False)
     api_key_source: str = "prompt"
+    debug: bool = False
 
     def safe_dict(self) -> dict[str, Any]:
         return {
             "provider": self.provider,
             "model": self.model,
             "api_key_source": self.api_key_source,
+            "debug": self.debug,
         }
 
 

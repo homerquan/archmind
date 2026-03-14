@@ -18,13 +18,19 @@ PROVIDER_ENV_VARS = {
 }
 
 
-def collect_llm_config(ui, provider_hint: str | None = None) -> LLMConfig:
+def collect_llm_config(ui, provider_hint: str | None = None, debug: bool = False) -> LLMConfig:
     if provider_hint in PROVIDER_MODELS:
         provider = provider_hint
     else:
         provider = ui.choose("LLM provider", ["openai", "anthropic", "gemini"], default="openai")
     api_key, source = resolve_api_key(provider, ui)
-    return LLMConfig(provider=provider, model=PROVIDER_MODELS[provider], api_key=api_key, api_key_source=source)
+    return LLMConfig(
+        provider=provider,
+        model=PROVIDER_MODELS[provider],
+        api_key=api_key,
+        api_key_source=source,
+        debug=debug,
+    )
 
 
 def resolve_api_key(provider: str, ui) -> tuple[str | None, str]:
@@ -46,7 +52,8 @@ def llm_completion(system_prompt: str, user_prompt: str, llm_config: LLMConfig) 
         from litellm import completion
     except Exception:
         return None
-    _enable_litellm_debug(litellm)
+    if llm_config.debug:
+        _enable_litellm_debug(litellm)
     try:  # pragma: no cover - optional dependency and network path
         response = completion(
             model=normalized_model_name(llm_config.provider, llm_config.model),

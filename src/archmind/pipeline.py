@@ -21,7 +21,7 @@ def run(request: ArchitectureRequest, ui, workspaces_root: Path | None = None) -
     ensure_dir(workspace)
 
     write_json(workspace / "input" / "request.json", request.to_dict())
-    llm_config = collect_llm_config(ui, request.llm_provider)
+    llm_config = collect_llm_config(ui, request.llm_provider, debug=request.debug)
     write_json(workspace / "input" / "llm_config.json", llm_config.safe_dict())
 
     repo_path = workspace / "source" / "repo"
