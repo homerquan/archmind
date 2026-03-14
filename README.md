@@ -7,6 +7,7 @@ Under the hood, ArchMind turns the codebase into several graph views, such as de
 ## Demo
 
 Watch the ArchMind demo video: [https://youtu.be/csiNiZG_ygQ](https://youtu.be/csiNiZG_ygQ)
+Sample output: see the `sample_results` folder
 
 ## v0 product shape
 - Interface: CLI-only REPL
