@@ -1,6 +1,0 @@
-{
-  "branch": "main",
-  "github_url": "https://github.com/mongodb/mongo-java-driver.git",
-  "llm_provider": "openai",
-  "output_dir": "result-mongo-java-driver"
-}
