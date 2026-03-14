@@ -1,10 +1,8 @@
 # ArchMind
 
-ArchMind is a Python REPL-style CLI for understanding and analyzing software architecture from a GitHub repository. It opens with a polished terminal intro, prompts for any missing inputs, clones a selected branch, builds an architecture graph, applies PyG-based graph analysis, uses an LLM to interpret the findings in context, and produces a report on screen and in Markdown.
+ArchMind is a tool for exploring and analyzing the architecture of a software project from its GitHub repository. It scans a Python or Java codebase, builds architecture graphs, looks for structural problems like tight coupling or weak boundaries, and produces a report you can read in the terminal or export as Markdown. Current support is limited to Python and Java repositories.
 
-Current repository language support is limited to Python and Java repositories.
-
-The repository is documentation-driven at this stage. These markdown files define the implementation contract for future code.
+Under the hood, ArchMind turns the codebase into several graph views, such as dependency graphs, architecture boundary graphs, data-flow graphs, and function relationship graphs. It then analyzes those graphs to detect patterns that often signal architecture problems, and uses an LLM to turn the raw graph findings into a more readable explanation and report.
 
 ## Demo
 
