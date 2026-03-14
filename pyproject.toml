@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "archmind"
-version = "0.1.0"
+version = "0.1.1"
 description = "REPL-style architecture analysis CLI for Git repositories."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -16,6 +16,11 @@ dependencies = [
   "networkx>=3.3",
   "matplotlib>=3.9.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/homerquan/archmind"
+Repository = "https://github.com/homerquan/archmind"
+Issues = "https://github.com/homerquan/archmind/issues"
 
 [project.scripts]
 archmind = "archmind.cli:main"
