@@ -21,7 +21,7 @@ The repository is documentation-driven at this stage. These markdown files defin
 
 ## Demo
 
-Watch the ArchMind demo video: [https://youtu.be/yHiM8-ig27o](https://youtu.be/yHiM8-ig27o)
+Watch the ArchMind demo video: [https://youtu.be/csiNiZG_ygQ](https://youtu.be/csiNiZG_ygQ)
 
 ## v0 product shape
 - Interface: CLI-only REPL
@@ -190,7 +190,7 @@ Workspace artifacts remain under `workspaces/<run_id>/` and include:
 - Prefer explicit schemas over prompt-only conventions.
 - Record seeds, versions, hashes, and feature-schema changes whenever results should be reproducible.
 
-## Contents
+## Documents
 - `AGENTS.md` - repo instructions for coding agents
 - `SPEC.md` - system specification and domain contracts
 - `agent_roles.md` - execution roles and artifact ownership
